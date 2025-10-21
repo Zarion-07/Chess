@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/Chess.css">
+    <script src="~/js/Pieces.js"></script>
+    <script src="~/js/site.js"></script>
+    <script src="~/js/FenManipulation.js"></script>
+</head>
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+</div>
+
+<body>
+    <div id="moveInfo">
+        <table id="chessboard">
+            @{
+                var initialBoard = new string[8, 8]
+                {
+                        { "BR", "BN", "BB", "BQ", "BK", "BB", "BN", "BR" },
+                        { "BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP" },
+                        { "", "", "", "", "", "", "", "" },
+                        { "", "", "", "", "", "", "", "" },
+                        { "", "", "", "", "", "", "", "" },
+                        { "", "", "", "", "", "", "", "" },
+                        { "WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP" },
+                        { "WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR" }
+                };
+            }
+
+            @for (int row = 0; row < 8; row++)
+            {
+                <tr>
+                    @for (int col = 0; col < 8; col++)
+                    {
+                        var squareColor = (row + col) % 2 == 0 ? "light" : "dark";
+                        var piece = initialBoard[row, col];
+                        
+                        <td class="square @squareColor clickable-element hover" data-piece="@piece" data-row="@row" data-col="@col" onclick="play(this)">
+                            @if (!string.IsNullOrEmpty(piece))
+                            {
+                                <img src="~/Images/@(piece).png" alt="@piece" />
+                            }
+                        </td>
+                    }
+                </tr>
+            }
+        </table>
+    </div>
+</body>
