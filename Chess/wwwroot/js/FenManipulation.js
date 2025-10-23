@@ -11,7 +11,6 @@
     const newRow = parseInt(dest.getAttribute("data-row"));
     const newCol = parseInt(dest.getAttribute("data-col"));
     const pieceSymbol = dest.getAttribute("data-piece");
-    console.log(pieceSymbol);
     const color = pieceSymbol[0];
     const pieceName = pieceSymbol[1];
 
@@ -49,18 +48,30 @@
         let current = expandRow(board[i]);
         if (i === oldRow) {
             current[oldCol] = "";
-        } else if (i === newRow) {
+        } if (i === newRow) {
             current[newCol] = (color === "W") ? pieceName.toUpperCase() : pieceName.toLowerCase();
         }
         board[i] = collapseRow(current);
     }
 
+    if (pieceName === "P" && (Math.abs(newRow - oldRow) === 2)) {
+        const name = `${newCol}${newRow}`;
+        console.log(name);
+        parts[3] = name;
+    } else {
+        parts[3] = "-";
+        console.log("no");
+    }
+
+    parts[1] = (color === "W") ? "b" : "w";
     // Join the updated board into the final FEN string
     const newBoard = board.join("/");
 
     // Replace the old board part in the FEN string
     parts[0] = newBoard;
-    const newFen = parts.join(" "); // Reconstruct the full FEN string
+    const newFEN = parts.join(" "); // Reconstruct the full FEN string
 
-    return newFen;
+    localStorage.setItem("chessFEN", newFEN);
+    console.log(newFEN);
+    return newFEN;
 }

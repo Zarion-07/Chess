@@ -1,5 +1,7 @@
-﻿let currentFEN = localStorage.getItem("chessFEN") ||
-    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+﻿
+currentFEN = localStorage.getItem("chessFEN") ||
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
 
 function play(piece) {
     var pieceid = piece.getAttribute("data-piece");
@@ -12,12 +14,13 @@ function play(piece) {
 
     if (highlighted.length === 0) {
         if (!pieceid || pieceid === "") return;
-        Pieces(pieceid, row, col);
-    }
-    
-    else {
-        Move(piece, currentFEN);
-        console.log(currentFEN);
+        Pieces(pieceid, row, col, currentFEN);
+
+    } else {
+        const newFEN = Move(piece, currentFEN);
+        if (newFEN) {
+            currentFEN = newFEN; // Update the global FEN
+        }
     }
 }
 
