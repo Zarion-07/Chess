@@ -18,7 +18,7 @@
     <div id="moveInfo">
         <table id="chessboard">
             @{
-                var initialBoard = new string[8, 8]
+                string[,]? initialBoard = new string[8, 8]
                 {
                         { "BR", "BN", "BB", "BQ", "BK", "BB", "BN", "BR" },
                         { "BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP" },
@@ -36,8 +36,8 @@
                 <tr>
                     @for (int col = 0; col < 8; col++)
                     {
-                        var squareColor = (row + col) % 2 == 0 ? "light" : "dark";
-                        var piece = initialBoard[row, col];
+                        string? squareColor = (row + col) % 2 == 0 ? "light" : "dark";
+                        string? piece = initialBoard[row, col];
                         
                         <td class="square @squareColor clickable-element hover" data-piece="@piece" data-row="@row" data-col="@col" onclick="play(this)">
                             @if (!string.IsNullOrEmpty(piece))
