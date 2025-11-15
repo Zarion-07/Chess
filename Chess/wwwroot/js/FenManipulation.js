@@ -1,7 +1,6 @@
 ﻿function ManipulateFen(origin, dest, currentFEN) {
-    // Split FEN into parts
     const parts = currentFEN.split(" ");
-    const board = parts[0].split("/"); // Only take board part
+    const board = parts[0].split("/");
     
     console.log(currentFEN);
 
@@ -33,28 +32,34 @@
         if (empty > 0) out += empty;
         return out;
     };
+            
+    if (origin.pieceType === "P" && (Math.abs(origin.row - dest.row) === 1) && (Math.abs(origin.col - dest.col) === 1) && !(currentFEN.split(" ")[3] === "-")) { 
+        
+        let current = expandRow(board[origin.row - 1]);
+        current[dest.col - 1] = "";
+        
+        board[origin.row - 1] = collapseRow(current);
+    }
 
-    for (let i = 0; i < board.length; i++) {
+    for (i = 0; i < board.length; i++) {
         let current = expandRow(board[i]);
-
-        if (i === origin.row) {
-            current[origin.col] = "";
+        if (i === origin.row - 1) {
+            current[origin.col - 1] = "";
         }
 
-        if (i === dest.row) {
-            current[dest.col] = (origin.color === "W") ? origin.pieceType.toUpperCase() : origin.pieceType.toLowerCase();
+        if (i === dest.row - 1) {
+            current[dest.col - 1] = (origin.color === "W") ? origin.pieceType.toUpperCase() : origin.pieceType.toLowerCase();
         }
 
         board[i] = collapseRow(current);
     }
 
     if (origin.pieceType === "P" && Math.abs(dest.row - origin.row) === 2) {
-        const enPassantRow = (origin.color === "W") ? origin.row - 1 : origin.row + 1;
-        parts[3] = `${dest.col}${enPassantRow}`;
-        console.log(parts[3]);
+        const enPassantRow = (origin.color === "W") ? dest.row : dest.row;
+        const file = "abcdefgh"
+        parts[3] = `${file[dest.col - 1]}${enPassantRow}`;
     } else {
         parts[3] = "-";
-        console.log("no en passant");
     }
 
     parts[1] = (origin.color === "W") ? "b" : "w";

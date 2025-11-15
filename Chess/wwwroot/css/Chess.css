@@ -28,8 +28,12 @@
         height: 100%;
     }
 .highlighted {
-    outline: 3px solid yellow;
-    background-color: #ffeb3b !important;
+    outline: 3px solid lightblue;
+    background-color: lightskyblue !important;
+}
+.enemy {
+    outline: 3px solid lightcoral;
+    background-color: red !important;
 }
 
 .highlightPiece {

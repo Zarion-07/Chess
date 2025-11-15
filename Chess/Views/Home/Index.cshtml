@@ -31,13 +31,13 @@
                 };
             }
 
-            @for (int row = 0; row < 8; row++)
+            @for (int row = 1; row <= 8; row++)
             {
                 <tr>
-                    @for (int col = 0; col < 8; col++)
+                    @for (int col = 1; col <= 8; col++)
                     {
                         string? squareColor = (row + col) % 2 == 0 ? "light" : "dark";
-                        string? piece = initialBoard[row, col];
+                        string? piece = initialBoard[row - 1, col - 1];
                         
                         <td class="square @squareColor clickable-element hover" data-piece="@piece" data-row="@row" data-col="@col" onclick="play(this)">
                             @if (!string.IsNullOrEmpty(piece))
