@@ -69,6 +69,7 @@ function Pieces(item, currentFEN) {
                     }
                 }
             }
+            
             break;
         
         case "BP":
@@ -298,6 +299,7 @@ function Pieces(item, currentFEN) {
             break;
 
         case "BK":
+
         case "WK":
 
             const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];

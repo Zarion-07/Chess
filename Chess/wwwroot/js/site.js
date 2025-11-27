@@ -20,6 +20,8 @@ function play(piece) {
     
     to_Play = currentFEN.split(" ")[1].toUpperCase();
 
+    
+
     console.log(item.oppColor);
     if (highlighted.length === 0 && (item.color === to_Play)) {
         if (!item.pieceName) return;
@@ -39,3 +41,10 @@ function play(piece) {
     
 }
 
+function Promotion() {
+    const button = document.getElementById("Promotion");
+    const Promotion_box = document.getElementById("White_Promotion");
+    button.addEventListener('click', () => {
+        Promotion_box.style.display = 'block';
+    })
+}

@@ -34,6 +34,10 @@ function Move(square, currentFEN) {
                 enPassantNode.setAttribute("data-piece", "");
                 enPassantNode.innerHTML = "";
             }
+
+            else if (square.row === 8 || square.row === 1) {
+                
+            }
         }
 
         const parts = currentFEN.split(" ");
@@ -89,6 +93,7 @@ function Move(square, currentFEN) {
                 castling[1] = "-";
                 parts[2] = castling.join("");
                 currentFEN = parts.join(" ");
+                special = 1;
             }
 
             else if (Knode && square.col === 7) {
@@ -108,8 +113,9 @@ function Move(square, currentFEN) {
                 castling[1] = "-";
                 parts[2] = castling.join("");
                 currentFEN = parts.join(" ");
+                special = 1;
             }
-            special = 1;
+            
         }
 
         if (origin.pieceName === "BK" && (castling[2] === "k" || castling[3] === "q")) {
@@ -134,6 +140,7 @@ function Move(square, currentFEN) {
                 castling[3] = "-";
                 parts[2] = castling.join("");
                 currentFEN = parts.join(" ");
+                special = 1;
             }
 
             else if (Knode && square.col === 7) {
@@ -153,9 +160,8 @@ function Move(square, currentFEN) {
                 castling[3] = "-";
                 parts[2] = castling.join("");
                 currentFEN = parts.join(" ");
+                special = 1;
             }
-
-            special = 1;
         }
 
         square.node.innerHTML = `<img src="/Images/${origin.pieceName}.png" alt="${origin.pieceName}" />`;
