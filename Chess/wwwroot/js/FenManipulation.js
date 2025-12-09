@@ -73,6 +73,68 @@
     return newFEN;
 }
 
+function whitePromotion() {
+    console.log("YE");
+    element = document.querySelector("#White_Promotion");
+    element.style.display = "inline-block";
+}
+
+function changeImage(piece, dest) {
+    if(origin.color === "W") {
+            const piece = whitePromotion();
+            board[1][dest.col] = piece;
+            changeImage(piece, dest);
+        }
+    if(origin.color === "B") {
+        const piece = blackPromotion();
+        board[8][dest.col] = piece;
+        changeImage(piece, dest);
+    }
+
+
+    const square = document.querySelector(`.square[data-row="${dest.row}"][data-col="${dest.col}"]`);
+    if(piece === "Q") {
+        square.innerHTML = '<img src="~/Images/WQ.png" alt="WQ" />';
+        square.dataset.customValue = "WQ";
+    }
+
+    else if(piece === "R") {
+        square.innerHTML = '<img src="~/Images/WQ.png" alt="WR" />';
+        square.dataset.customValue = "WR";
+    }
+
+    else if(piece === "B") {
+        square.innerHTML = '<img src="~/Images/WB.png" alt="WB" />';
+        square.dataset.customValue = "WB";
+    }
+
+    else if(piece === "K") {
+        square.innerHTML = '<img src="~/Images/WK.png" alt="WK" />';
+        square.dataset.customValue = "WK";
+    }
+
+    else if(piece === "q") {
+        square.innerHTML = '<img src="~/Images/BQ.png" alt="BQ" />';
+        square.dataset.customValue = "BQ";
+    }
+
+    else if(piece === "r") {
+        square.innerHTML = '<img src="~/Images/BR.png" alt="BR" />';
+        square.dataset.customValue = "BQ";
+    }
+
+    else if(piece === "b") {
+        square.innerHTML = '<img src="~/Images/BB.png" alt="BB" />';
+        square.dataset.customValue = "BQ";
+    }
+
+    else if(piece === "k") {
+        square.innerHTML = '<img src="~/Images/BK.png" alt="BK" />';
+        square.dataset.customValue = "BQ";
+    }
+    console.log(square);
+}
+
 function castlingFEN(origin, rook, currentFEN) {
     const parts = currentFEN.split(" ");
     const board = parts[0].split("/");

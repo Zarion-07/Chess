@@ -8,26 +8,54 @@ class WebSocketClient
 {
     public async Task ConnectToServer(string serverUri)
     {
-        ClientWebSocket clientWebSocket = new ClientWebSocket();
-        await clientWebSocket.ConnectAsync(new Uri(serverUri), CancellationToken.None);
+        using ClientWebSocket client = new ClientWebSocket();
 
-        Console.WriteLine("Connected to the server. Start sending messages...");
+        await client.ConnectAsync(new Uri(serverUri), CancellationToken.None);
+        Console.WriteLine("Connected to server.");
 
-        string message = "Hello, WebSocket!";
-        byte[] buffer = Encoding.UTF8.GetBytes(message);
-        await clientWebSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-
-        byte[] receiveBuffer = new byte[1024];
-
-        while (clientWebSocket.State == WebSocketState.Open)
+        // Start receive loop
+        _ = Task.Run(async () =>
         {
-            WebSocketReceiveResult result = await clientWebSocket.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+            byte[] receiveBuffer = new byte[2048];
 
-            if(result.MessageType == WebSocketMessageType.Text)
+            while (client.State == WebSocketState.Open)
             {
-                string receivedMessage = Encoding.UTF8.GetString(receiveBuffer,0,result.Count);
-                Console.WriteLine($"Received message from server: {receivedMessage}");
+                var result = await client.ReceiveAsync(new ArraySegment<byte>(receiveBuffer), CancellationToken.None);
+
+                if (result.MessageType == WebSocketMessageType.Close)
+                {
+                    await client.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", CancellationToken.None);
+                    Console.WriteLine("Server closed connection.");
+                    break;
+                }
+
+                string msg = Encoding.UTF8.GetString(receiveBuffer, 0, result.Count);
+                Console.WriteLine("Received: " + msg);
             }
+        });
+
+        // Send loop
+        while (client.State == WebSocketState.Open)
+        {
+            string? input = Console.ReadLine();
+            
+            if (input != null)
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(input);
+
+                await client.SendAsync(
+                new ArraySegment<byte>(buffer),
+                WebSocketMessageType.Text,
+                true,
+                CancellationToken.None
+                );
+            }
+            
+            else
+            {
+                continue;
+            }
+            
         }
     }
 }

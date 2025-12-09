@@ -35,9 +35,7 @@ function Move(square, currentFEN) {
                 enPassantNode.innerHTML = "";
             }
 
-            else if (square.row === 8 || square.row === 1) {
-                
-            }
+            
         }
 
         const parts = currentFEN.split(" ");

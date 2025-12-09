@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button {
+            color: white;
+            background-color: limegreen;
+            height: 200px;
+            width: 300px;
+        }
+    </style>
+
+    
+
+</head>
+<body>
+    <h1>Chess</h1>
+
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <button type="submit" id="createRoom">Create Room</button>
+    </form>
+
+    <script>
+        document.getElementById("createRoom").onclick = function () {
+
+            const socket = new WebSocket("ws://localhost:8081");
+
+            socket.onopen = () => {
+            console.log("Browser connected");
+            socket.send("PING");
+            };
+
+
+            socket.onmessage = (event) => {
+                console.log("Server says:", event.data);
+            };
+
+            socket.onclose = () => console.log("Connection closed");
+        };
+    </script>
+</body>
+</html>

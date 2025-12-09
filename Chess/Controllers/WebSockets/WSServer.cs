@@ -9,11 +9,11 @@ class WebSocketServer
     public async Task StartServer(string IPAddress, int port)
     {
         HttpListener listener = new HttpListener();
-        listener.Prefixes.Add($"https://{IPAddress}:{port}/");
+        listener.Prefixes.Add($"http://{IPAddress}:{port}/");
         listener.Start();
 
         Console.WriteLine("Server started. Waiting for connections...");
-        
+
         while(true)
         {
             HttpListenerContext context = await listener.GetContextAsync();
@@ -47,6 +47,7 @@ class WebSocketServer
 
                 await socket.SendAsync(new ArraySegment<byte>(buffer,0,result.Count), WebSocketMessageType.Text, true, CancellationToken.None);
             }
+
             
             else if(result.MessageType == WebSocketMessageType.Close)
             {

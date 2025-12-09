@@ -8,8 +8,69 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
+            "url": "http://localhost:5020",
             "webRoot": "${workspaceFolder}"
         }
     ]
 }
+
+/* {
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Instance1",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/Chess/bin/Debug/net9.0/Chess.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Chess",
+      "stopAtEntry": false,
+      "launchBrowser": {
+        "enabled": true,
+        "args": "http://localhost:6000",
+        "windows": {
+          "command": "cmd.exe",
+          "args": "/C start chrome http://localhost:6000"
+        }
+      }
+    },
+    {
+      "name": "Instance2",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/Chess/bin/Debug/net9.0/Chess.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/Chess",
+      "stopAtEntry": false,
+      "launchBrowser": {
+        "enabled": true,
+        "args": "http://localhost:6002",
+        "windows": {
+          "command": "cmd.exe",
+          "args": "/C start chrome http://localhost:6002"
+        }
+      }
+    }
+  ]
+} */
+
+
+
+/* {
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Chess Project",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/bin/Debug/net9.0/Chess.dll",
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+} */
+

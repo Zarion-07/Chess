@@ -1,0 +1,64 @@
+/* {
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Instance1": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:6000;https://localhost:6001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Instance2": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:6002;https://localhost:6003",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+} */
+
+program .cs
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); // REQUIRED
+
+var app = builder.Build();
+
+// Configure WebSockets
+app.UseWebSockets();
+
+// Configure error handling
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+// Start your custom WebSocket server on a separate port
+var server = new WebSocketServer();
+Task.Run(() => server.StartServer("localhost", 8081));
+
+// Map MVC Controllers
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Home}/{id?}"
+);
+
+// Map Razor Pages
+app.MapRazorPages();
+
+// Run the App (ONLY once)
+app.Run();

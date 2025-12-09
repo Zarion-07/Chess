@@ -8,6 +8,8 @@
     <script src="~/js/Move.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/js/FenManipulation.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
 </head>
 
 
@@ -51,16 +53,28 @@
             }
         </table>
     </div>
+    <div id="victory-B">
+        <p class="victory">BLACK HAS WON</p>
+        <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
+        <button class="close" type="submit" onclick="close_B()">Back</button>
+    </div>
+    <div id="victory-W">
+        <p class="victory">WHITE HAS WON</p>
+        <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
+        <button class="close" type="submit" onclick="close_W()">Back</button>
+    </div>
 
     <button id="Promotion" type="button" onclick="Promotion()">Toggle</button>
 
-    <div>
-        <div id="White_Promotion" name="White_Promotion">
-            <button id="promotion" value="WQ"><img src="~/Images/WQ.png" alt="WQ" /></button>
-            <button id="promotion" value="WR"><img src="~/Images/WR.png" alt="WR" /></button>
-            <button id="promotion" value="WK"><img src="~/Images/WK.png" alt="WK" /></button>
-            <button id="promotion" value="WB"><img src="~/Images/WB.png" alt="WB" /></button>
-        </div>
+    <div id="White_Promotion" name="White_Promotion">
+        <table>
+            <tr>
+                <td class="box" onclick=""><img id="promotion" src="~/Images/WQ.png" alt="WQ" /></td>
+                <td class="box"><img id="promotion" src="~/Images/WR.png" alt="WR" /></td>
+                <td class="box"><img id="promotion" src="~/Images/WK.png" alt="WK" /></td>
+                <td class="box"><img id="promotion" src="~/Images/WB.png" alt="WB" /></td>
+            </tr>
+        </table>
     </div>
 
     <div id="Black_Promotion" name="Black_Promotion" hidden>

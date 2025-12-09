@@ -1,0 +1,61 @@
+/* {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+} */
+
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Chess Project",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/bin/Debug/net9.0/Chess.dll",
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      }
+    },
+    {
+      "name": "Open Chrome (Instance1)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "https://localhost:7020",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Open Chrome (Instance2)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "https://localhost:6001",
+      "webRoot": "${workspaceFolder}"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run + Chrome (Instance1)",
+      "configurations": ["Run Chess Project", "Open Chrome (Instance1)"]
+    },
+    {
+      "name": "Run + Chrome (Instance2)",
+      "configurations": ["Run Chess Project", "Open Chrome (Instance2)"]
+    }
+  ]
+}
+
+
