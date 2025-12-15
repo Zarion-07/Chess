@@ -64,26 +64,25 @@
         <button class="close" type="submit" onclick="close_W()">Back</button>
     </div>
 
-    <button id="Promotion" type="button" onclick="Promotion()">Toggle</button>
-
     <div id="White_Promotion" name="White_Promotion">
         <table>
             <tr>
-                <td class="box" onclick=""><img id="promotion" src="~/Images/WQ.png" alt="WQ" /></td>
-                <td class="box"><img id="promotion" src="~/Images/WR.png" alt="WR" /></td>
-                <td class="box"><img id="promotion" src="~/Images/WK.png" alt="WK" /></td>
-                <td class="box"><img id="promotion" src="~/Images/WB.png" alt="WB" /></td>
+                <td data-piece="WQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WQ.png" alt="WQ" /></td>
+                <td data-piece="WR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WR.png" alt="WR" /></td>
+                <td data-piece="WN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WN.png" alt="WN" /></td>
+                <td data-piece="WB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WB.png" alt="WB" /></td>
             </tr>
         </table>
     </div>
 
-    <div id="Black_Promotion" name="Black_Promotion" hidden>
-        <div>
-            <button value="BQ"><img src="~/Images/BQ.png" alt="BQ" /></button>
-            <button value="BR"><img src="~/Images/BR.png" alt="BR" /></button>
-            <button value="BK"><img src="~/Images/BK.png" alt="BK" /></button>
-            <button value="BB"><img src="~/Images/BB.png" alt="BB" /></button>
-        </div>
-        
+    <div id="Black_Promotion" name="Black_Promotion">
+        <table>
+            <tr>
+                <td data-piece="BQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BQ.png" alt="BQ" /></td>
+                <td data-piece="BR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BR.png" alt="BR" /></td>
+                <td data-piece="BN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BN.png" alt="BN" /></td>
+                <td data-piece="BB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BB.png" alt="BB" /></td>
+            </tr>
+        </table>
     </div>
 </body>

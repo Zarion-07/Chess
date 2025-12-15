@@ -61,6 +61,14 @@
         parts[3] = "-";
     }
 
+    if (origin.pieceType === "P" && (dest.row === 1))  {
+        whitePromotion();
+    }
+
+    else if (origin.pieceType === "P" && (dest.row === 8))  {
+        blackPromotion();
+    }
+
     parts[1] = (origin.color === "W") ? "b" : "w";
     // Join the updated board into the final FEN string
     const newBoard = board.join("/");
@@ -72,6 +80,11 @@
     console.log(newFEN);
     return newFEN;
 }
+function returner(piece) {
+    item = piece.dataset.piece;
+    console.log(item);
+    return item;
+}
 
 function whitePromotion() {
     console.log("YE");
@@ -79,59 +92,97 @@ function whitePromotion() {
     element.style.display = "inline-block";
 }
 
-function changeImage(piece, dest) {
-    if(origin.color === "W") {
-            const piece = whitePromotion();
-            board[1][dest.col] = piece;
-            changeImage(piece, dest);
+function blackPromotion() {
+    console.log("YE");
+    element = document.querySelector("#Black_Promotion");
+    element.style.display = "inline-block";
+}
+
+function changeImage(node) {
+    console.log("reached");
+    const piece = node.dataset.piece;
+    const parts = currentFEN.split(" ");
+    const board = parts[0].split("/");
+    let j = -1;
+    let r = -1;
+
+    const expandRow = (rowStr) => {
+        let arr = [];
+        for (let ch of rowStr) {
+            if (!isNaN(ch)) {
+                arr.push(...Array(parseInt(ch)).fill(""));
+            } else {
+                arr.push(ch);
+            }
         }
-    if(origin.color === "B") {
-        const piece = blackPromotion();
-        board[8][dest.col] = piece;
-        changeImage(piece, dest);
+        return arr;
+    };
+
+    const collapseRow = (arr) => {
+        let out = "";
+        let empty = 0;
+        for (let cell of arr) {
+            if (cell === "") empty++;
+            else {
+                if (empty > 0) {
+                    out += empty;
+                    empty = 0;
+                }
+                out += cell;
+            }
+        }
+        if (empty > 0) out += empty;
+        return out;
+    };
+
+    if(piece[0] === "W") {
+        let row = expandRow(board[0]);
+
+        for(i = 0; i < 8; i++) {
+            if(row[i] === "P") {
+                row[i] = piece[1];
+                j = i + 1;
+                r = 1;
+                board[0] = collapseRow(row);
+                console.log(board);
+                console.log(row);
+                break;
+            }
+        }
+
+        element = document.querySelector("#White_Promotion");
+        element.style.display = "none";
     }
 
+    if(piece[0] === "B") {
+        row = expandRow(board[7]);
+        for(i = 0; i < 8; i++) {
+            if(row[i] === "p") {
+                row[i] = piece[1].toLowerCase();
+                j = i + 1;
+                r = 8;
+                board[7] = collapseRow(row);
+                console.log(board);
+                console.log(row);
+                console.log(j);
+                break;
+            }
+        }
 
-    const square = document.querySelector(`.square[data-row="${dest.row}"][data-col="${dest.col}"]`);
-    if(piece === "Q") {
-        square.innerHTML = '<img src="~/Images/WQ.png" alt="WQ" />';
-        square.dataset.customValue = "WQ";
+        element = document.querySelector("#Black_Promotion");
+        element.style.display = "none";
     }
 
-    else if(piece === "R") {
-        square.innerHTML = '<img src="~/Images/WQ.png" alt="WR" />';
-        square.dataset.customValue = "WR";
-    }
+    const square = document.querySelector(`.square[data-row="${r}"][data-col="${j}"]`);
 
-    else if(piece === "B") {
-        square.innerHTML = '<img src="~/Images/WB.png" alt="WB" />';
-        square.dataset.customValue = "WB";
-    }
-
-    else if(piece === "K") {
-        square.innerHTML = '<img src="~/Images/WK.png" alt="WK" />';
-        square.dataset.customValue = "WK";
-    }
-
-    else if(piece === "q") {
-        square.innerHTML = '<img src="~/Images/BQ.png" alt="BQ" />';
-        square.dataset.customValue = "BQ";
-    }
-
-    else if(piece === "r") {
-        square.innerHTML = '<img src="~/Images/BR.png" alt="BR" />';
-        square.dataset.customValue = "BQ";
-    }
-
-    else if(piece === "b") {
-        square.innerHTML = '<img src="~/Images/BB.png" alt="BB" />';
-        square.dataset.customValue = "BQ";
-    }
-
-    else if(piece === "k") {
-        square.innerHTML = '<img src="~/Images/BK.png" alt="BK" />';
-        square.dataset.customValue = "BQ";
-    }
+    square.innerHTML = `<img src="/Images/${piece}.png" alt="${piece}" />`;
+    square.dataset.piece = `${piece}`;
+    parts[0] = board.join("/");
+    const newBoard = board.join("/");
+    
+    parts[0] = newBoard;
+    currentFEN = parts.join(" ");
+    
     console.log(square);
 }
 

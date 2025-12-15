@@ -382,6 +382,3 @@ function Pieces(item, currentFEN) {
             break;
     }
 }
-
-
-
