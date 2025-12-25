@@ -6,8 +6,10 @@
 }
 
 #moveInfo {
-    margin-left: 54vh;
-    margin-right: auto;
+    margin: 0;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
 }
 
 #chessboard {
@@ -48,45 +50,61 @@
 }
 
 .highlightPiece {
-    background-color: dimgrey;
+    background-color: dimgrey !important;
 }
 
 #White_Promotion {
     display: none;
-    width: 50vh;
-    height: 15vh;
-    z-index: 100;
-    background-color: black;
+    justify-content: center;
+    align-items: center;
+    
     position: fixed;
-    width: 25vw;
-    top: 200px;
-    left: 400px;
-    right: 0;
-    bottom: 400px;
-    transition: ease-in 0.3s;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: clamp(280px, 30vw, 400px);
+    height: clamp(80px, 12vh, 220px);
+
+    z-index: 999;
+    background-color: black;
     border: #f0d9b5;
     border-radius: 4px;
 }
 
+#White_Promotion img{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+#Black_Promotion img{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
 #Black_Promotion {
     display: none;
-    width: 50vh;
-    height: 15vh;
-    z-index: 100;
-    background-color: black;
+    justify-content: center;
+    align-items: center;
+    
     position: fixed;
-    width: 25vw;
-    top: 200px;
-    left: 400px;
-    right: 0;
-    bottom: 400px;
-    transition: ease-in 0.3s;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: clamp(280px, 30vw, 400px);
+    height: clamp(80px, 12vh, 220px);
+
+    z-index: 999;
+    background-color: black;
     border: #f0d9b5;
     border-radius: 4px;
 }
 
 .box {
-    height: 14.5vh;
+    height: 11vh;
     width: 13vh;
     background-color: #f0d9b5;
     border: 3px solid black;
@@ -105,11 +123,11 @@
     border-radius: 8px;
     height: 45vh;
     width: 25vw;
-    top: 200px;
-    left: 400px;
-    right: 0;
-    bottom: 400px;
-    z-index: 998;
+    justify-content: center;
+    align-items: center;
+    top: 30%;
+    left: 37%;
+    z-index: 999;
 }
 
 #victory-B p {
@@ -154,11 +172,9 @@
     border-radius: 8px;
     height: 45vh;
     width: 25vw;
-    top: 200px;
-    left: 400px;
-    right: 0;
-    bottom: 400px;
-    z-index: 998;
+    top: 30%;
+    left: 37%;
+    z-index: 999;
 }
 
 #victory-W p {
@@ -170,4 +186,14 @@
     background-color: gray;
 }
 
+.overlay {
+    position: fixed;
+    inset: 0;                  /* covers full viewport */
+    background: rgba(0, 0, 0, 0.6); /* dim background (optional) */
+    z-index: 999;
 
+    justify-content: center;
+    align-items: center;
+
+    pointer-events: all;       /* blocks clicks */
+}

@@ -74,11 +74,16 @@ function Checkmate(currentFEN) {
 
 function victoryBlack() {
     console.log("YEs");
+    div = document.querySelector(".container-VB");
+    div.classList.add("overlay");
     element = document.querySelector("#victory-B");
     element.style.display = "block";
+    
 }
 function victoryWhite() {
     console.log("YEs");
+    div = document.querySelector(".container-VW");
+    div.classList.add("overlay");
     element = document.querySelector("#victory-W");
     element.style.display = "block";
 }
@@ -87,6 +92,8 @@ function close_B() {
     element = document.querySelector(".close");
     element1 = document.querySelector("#victory-B");
     element1.style.display = "none";
+    div = document.querySelector(".container-VB");
+    div.classList.remove("overlay");
 }
 
 function close_W() {
@@ -94,9 +101,15 @@ function close_W() {
     element = document.querySelector(".close");
     element1 = document.querySelector("#victory-W");
     element1.style.display = "none";
+    div = document.querySelector(".container-VW");
+    div.classList.remove("overlay");
 }
 
 function refreshed() {
     console.log("Xf");
+    div = document.querySelector(".container-VW");
+    div.classList.remove("overlay");
+    div = document.querySelector(".container-VB");
+    div.classList.remove("overlay");
     window.location.reload(true);
 }

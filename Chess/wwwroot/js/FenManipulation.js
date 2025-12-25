@@ -80,22 +80,22 @@
     console.log(newFEN);
     return newFEN;
 }
-function returner(piece) {
-    item = piece.dataset.piece;
-    console.log(item);
-    return item;
-}
 
 function whitePromotion() {
     console.log("YE");
     element = document.querySelector("#White_Promotion");
-    element.style.display = "inline-block";
+    div = document.querySelector(".container-WP");
+    div.classList.add("overlay");
+    element.style.display = "flex";
+
 }
 
 function blackPromotion() {
     console.log("YE");
     element = document.querySelector("#Black_Promotion");
-    element.style.display = "inline-block";
+    div = document.querySelector(".container-BP");
+    div.classList.add("overlay");
+    element.style.display = "flex";
 }
 
 function changeImage(node) {
@@ -144,6 +144,8 @@ function changeImage(node) {
                 j = i + 1;
                 r = 1;
                 board[0] = collapseRow(row);
+                div = document.querySelector(".container-WP");
+                div.classList.remove("overlay");
                 console.log(board);
                 console.log(row);
                 break;
@@ -162,6 +164,9 @@ function changeImage(node) {
                 j = i + 1;
                 r = 8;
                 board[7] = collapseRow(row);
+                div = document.querySelector(".container-BP");
+                console.log(div);
+                div.classList.remove("overlay");
                 console.log(board);
                 console.log(row);
                 console.log(j);

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Chess";
 }
 
 <head>
@@ -9,9 +9,10 @@
     <script src="~/js/site.js"></script>
     <script src="~/js/FenManipulation.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
 </head>
-
+<nav>
+    
+</nav>
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
@@ -53,36 +54,46 @@
             }
         </table>
     </div>
-    <div id="victory-B">
-        <p class="victory">BLACK HAS WON</p>
-        <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
-        <button class="close" type="submit" onclick="close_B()">Back</button>
-    </div>
-    <div id="victory-W">
-        <p class="victory">WHITE HAS WON</p>
-        <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
-        <button class="close" type="submit" onclick="close_W()">Back</button>
-    </div>
 
-    <div id="White_Promotion" name="White_Promotion">
-        <table>
-            <tr>
-                <td data-piece="WQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WQ.png" alt="WQ" /></td>
-                <td data-piece="WR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WR.png" alt="WR" /></td>
-                <td data-piece="WN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WN.png" alt="WN" /></td>
-                <td data-piece="WB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WB.png" alt="WB" /></td>
-            </tr>
-        </table>
+    <div class="container-VB">
+        <div id="victory-B">
+            <p class="victory">BLACK HAS WON</p>
+            <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
+            <button class="close" type="submit" onclick="close_B()">Back</button>
+        </div>
     </div>
-
-    <div id="Black_Promotion" name="Black_Promotion">
-        <table>
-            <tr>
-                <td data-piece="BQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BQ.png" alt="BQ" /></td>
-                <td data-piece="BR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BR.png" alt="BR" /></td>
-                <td data-piece="BN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BN.png" alt="BN" /></td>
-                <td data-piece="BB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BB.png" alt="BB" /></td>
-            </tr>
-        </table>
+    <div class="container-VW">
+        <div id="victory-W">
+            <p class="victory">WHITE HAS WON</p>
+            <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
+            <button class="close" type="submit" onclick="close_W()">Back</button>
+        </div>
     </div>
+    
+    <div class="container-WP">
+        <div id="White_Promotion" name="White_Promotion">
+            <table>
+                <tr>
+                    <td data-piece="WQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WQ.png" alt="WQ" /></td>
+                    <td data-piece="WR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WR.png" alt="WR" /></td>
+                    <td data-piece="WN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WN.png" alt="WN" /></td>
+                    <td data-piece="WB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WB.png" alt="WB" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="container-BP">
+        <div id="Black_Promotion" name="Black_Promotion">
+            <table>
+                <tr>
+                    <td data-piece="BQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BQ.png" alt="BQ" /></td>
+                    <td data-piece="BR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BR.png" alt="BR" /></td>
+                    <td data-piece="BN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BN.png" alt="BN" /></td>
+                    <td data-piece="BB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BB.png" alt="BB" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
 </body>
