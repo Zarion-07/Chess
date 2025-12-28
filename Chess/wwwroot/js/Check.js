@@ -12,7 +12,7 @@ function isPinned(piece) {
             const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
 
             const traversingNode_Bishop = (rowDir, colDir) => {
-                dist = 1;
+                const dist = 1;
 
                 let count = 0;
 
@@ -121,4 +121,66 @@ function isPinned(piece) {
     }
 
     return array;
+}
+
+function kingMove(piece) {
+    if (!piece) return console.log("empty");
+
+    const kingMoves = [];
+    const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
+
+    const traversingNode_King = (rowDir, colDir) => {
+        const target_col = item.col + colDir;
+        const target_row = item.row + rowDir;
+    
+        const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
+    
+        if (targetNode) {
+            const pieceAtSquare = targetNode.getAttribute("data-piece");
+        
+            if (!pieceAtSquare) {
+                let element = `${target_row}${target_col}`;
+                kingMoves.push(element);
+            }
+            if(pieceAtSquare[0] === piece.oppColor) {
+                let element = `${target_row}${target_col}`;
+                kingMoves.push(element);
+            }
+        }
+    }
+
+    iteration.forEach(pair => {
+        const num1 = pair[0];
+        const num2 = pair[1];
+        traversingNode_King(num1, num2);
+    });
+    
+    const oppPieces = document.querySelectorAll(`.square[data-piece^="${piece.oppColor}"]`);
+
+    oppPieces.forEach(oppPiece => {
+        const array = check(piece);
+        if(array) {
+            array.forEach( element => {
+                if(element in kingMoves) {
+                    kingMoves.pop(element);
+                    console.log(element);
+                }
+            })
+        }
+    })
+
+    if(kingMoves) {
+        kingMoves.forEach(element => {
+            const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
+            const data = castlingNode1.getAttribute("data-piece");
+
+            if(data[0] === piece.oppColor) {
+                node.classList.add('enemy');
+            }
+
+            else if(data[0] === piece.color) {
+                node.classList.add('highlighted');
+            }
+        })
+    }
 }

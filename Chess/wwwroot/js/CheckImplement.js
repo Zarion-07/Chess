@@ -1,4 +1,5 @@
-    
+function check(piece) {
+    const item = new Piece(piece);
     let moves = [];
     
     switch (item.pieceName) {
@@ -233,4 +234,8 @@
                 const num2 = pair[1];
                 traversingNode_King(num1, num2);
             });
+            break;
+
+        return moves;
     }
+}

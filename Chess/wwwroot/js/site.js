@@ -14,7 +14,7 @@ class Piece {
 }
 
 function play(piece) {
-    var item = new Piece(piece);
+    const item = new Piece(piece);
 
     const highlighted = document.querySelectorAll(".highlighted, .enemy, .highlightPiece");
     
