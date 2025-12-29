@@ -4,6 +4,7 @@ function check(piece) {
     
     switch (item.pieceName) {
         case "WP":
+            console.log(item.pieceName);
             if (item.row > 0) {
                 
                 if (item.row <= 7 && item.row > 0) {
@@ -17,17 +18,21 @@ function check(piece) {
                 if (left) {
                     let element = `${item.row - 1}${item.col - 1}`;
                     moves.push(element);
+                    
                 }
 
                 if (right) {
+                    
                     let element = `${item.row - 1}${item.col + 1}`;
                     moves.push(element);
+                    
                 }
             }
             
-            break;
+            return moves;
         
         case "BP":
+            console.log(item.pieceName);
             if (item.row > 0) {
                 
                 if (item.row <= 7 && item.row > 0) {
@@ -41,19 +46,22 @@ function check(piece) {
                 if (left) {
                     let element = `${item.row + 1}${item.col - 1}`;
                     moves.push(element);
+                    
                 }
 
                 if (right) {
                     let element = `${item.row + 1}${item.col + 1}`;
                     moves.push(element);
+                    
                 }
             }
             
-            break;
+            return moves;
         
         case "WB":
             
         case "BB":
+            console.log(item.pieceName);
             const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
             const traversingNode_Bishop = (rowDir, colDir) => {
                 dist = 1;
@@ -87,11 +95,12 @@ function check(piece) {
                 traversingNode_Bishop(num1, num2);
             });
 
-            break;
+            return moves;
 
         case "WN":
             
         case "BN":
+            console.log(item.pieceName);
             const iteration_Knight = [[1,2], [-1,2], [-1,-2], [1,-2], [2,-1], [2,1], [-2,-1], [-2,1]];
 
             const traversingNode_Knight = (rowDir, colDir) => {
@@ -118,11 +127,12 @@ function check(piece) {
                 traversingNode_Knight(num1, num2);
             });
 
-            break;
+            return moves;
         
         case "WR":
 
         case "BR":
+            console.log(item.pieceName);
             const iteration_Rook = [[1,0], [0,1], [-1,0], [0,-1]];
 
             const traversingNode_Rook = (rowDir, colDir) => {
@@ -143,6 +153,7 @@ function check(piece) {
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
+                        dist++;
                         continue;
                     }
 
@@ -161,16 +172,16 @@ function check(piece) {
                 traversingNode_Rook(num1, num2);
             });
 
-            break;
+            return moves;
         
         case "WQ":
 
         case "BQ":
-
+            console.log(item.pieceName);
             const iteration_Queen = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
 
             const traversingNode_Queen = (rowDir, colDir) => {
-                dist = 1;
+                let dist = 1;
 
                 while(true) {
 
@@ -187,6 +198,7 @@ function check(piece) {
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
+                        dist++;
                         continue;
                     }
 
@@ -205,12 +217,12 @@ function check(piece) {
                 traversingNode_Queen(num1, num2);
             });
 
-            break;
+            return moves;
 
         case "BK":
 
         case "WK":
-
+            console.log(item.pieceName);
             const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
             const traversingNode_King = (rowDir, colDir) => {
 
@@ -234,8 +246,7 @@ function check(piece) {
                 const num2 = pair[1];
                 traversingNode_King(num1, num2);
             });
-            break;
 
-        return moves;
+            return moves;
     }
 }

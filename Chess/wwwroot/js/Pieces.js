@@ -15,7 +15,6 @@ function Pieces(item, currentFEN) {
         case "WP":
             if (item.row > 0) {
                 
-                const dest = item.row - 1;
                 if (item.row <= 7 && item.row > 0) {
                     let one = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col}"]`);
                     const pieceAtSquare = one.getAttribute("data-piece");
@@ -264,7 +263,7 @@ function Pieces(item, currentFEN) {
 
                     target_row = item.row + rowDir*dist;
                     target_col = item.col + colDir*dist;
-
+                    console.log(target_row);
                     if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
 
                     const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);

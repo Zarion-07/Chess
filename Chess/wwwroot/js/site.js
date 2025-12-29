@@ -22,7 +22,12 @@ function play(piece) {
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
         if (!item.pieceName) return;
-        Pieces(item, currentFEN);
+        console.log(item);
+        if(item.pieceType === "K" && item.color === to_Play) {
+            kingMove(item);
+        } else {
+            Pieces(item, currentFEN);
+        }
     } 
     
     else {
@@ -36,7 +41,6 @@ function play(piece) {
         }
     }
     
-    Checkmate(currentFEN);
 }
 
 function Promotion() {

@@ -130,8 +130,8 @@ function kingMove(piece) {
     const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
 
     const traversingNode_King = (rowDir, colDir) => {
-        const target_col = item.col + colDir;
-        const target_row = item.row + rowDir;
+        const target_col = piece.col + colDir;
+        const target_row = piece.row + rowDir;
     
         const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
     
@@ -154,33 +154,39 @@ function kingMove(piece) {
         const num2 = pair[1];
         traversingNode_King(num1, num2);
     });
-    
+    console.log(kingMoves);
     const oppPieces = document.querySelectorAll(`.square[data-piece^="${piece.oppColor}"]`);
-
+    console.log(oppPieces);
     oppPieces.forEach(oppPiece => {
-        const array = check(piece);
+        const array = check(oppPiece);
+        console.log(array);
         if(array) {
-            array.forEach( element => {
-                if(element in kingMoves) {
-                    kingMoves.pop(element);
+            array.forEach(element => {
+            if (kingMoves.includes(element)) {  
+                const index = kingMoves.indexOf(element);
+                if (index !== -1) {
+                    kingMoves.splice(index, 1);
                     console.log(element);
                 }
-            })
+            }
+        });
         }
     })
 
     if(kingMoves) {
+        console.log(kingMoves);
         kingMoves.forEach(element => {
             const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
-            const data = castlingNode1.getAttribute("data-piece");
+            const data = node.getAttribute("data-piece");
 
             if(data[0] === piece.oppColor) {
                 node.classList.add('enemy');
             }
 
-            else if(data[0] === piece.color) {
+            else {
                 node.classList.add('highlighted');
             }
         })
     }
+    piece.node.classList.add('highlightPiece');
 }
