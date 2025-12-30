@@ -141,6 +141,52 @@ function kingMove(piece) {
             if (!pieceAtSquare) {
                 let element = `${target_row}${target_col}`;
                 kingMoves.push(element);
+
+                if (rowDir === 0 && colDir === 1) {
+
+                    const castlingRights = currentFEN.split(" ")[2];
+                    const canCastle = piece.color === "W" ? castlingRights.includes("K") : castlingRights.includes("k");
+
+                    if (canCastle) {
+                        const castlingNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col + 1}"]`);
+                        if (castlingNode) {
+                            const pieceAtCastling = castlingNode.getAttribute("data-piece");
+                            if (!pieceAtCastling) {
+                                // Verify rook exists
+                                const rookSquare = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col + 2}"]`);
+                                const rookPiece = rookSquare?.getAttribute("data-piece");
+                                if (rookPiece && rookPiece[0] === piece.color && rookPiece[1] === "R") {
+                                    let element = `${target_row}${target_col + 1}`;
+                                    kingMoves.push(element);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                else if (rowDir === 0 && colDir === -1) {
+                    const castlingRights = currentFEN.split(" ")[2];
+                    const canCastle = piece.color === "W" ? castlingRights.includes("Q") : castlingRights.includes("q")
+                    if (canCastle) {
+                        const castlingNode1 = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col - 1}"]`)
+                        if (castlingNode1) {
+                            const pieceAtCastling1 = castlingNode1.getAttribute("data-piece")
+                            if (!pieceAtCastling1) {
+                                const castlingNode2 = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col - 2}"]`);
+                                const pieceAtCastling2 = castlingNode2?.getAttribute("data-piece")
+                                if (!pieceAtCastling2) {
+                                    // Verify rook exists
+                                    const rookSquare = document.querySelector(`.square[data-row="${target_row}"][data-col="1"]`);
+                                    const rookPiece = rookSquare?.getAttribute("data-piece")
+                                    if (rookPiece && rookPiece[0] === piece.color && rookPiece[1] === "R") {
+                                        let element = `${target_row}${target_col - 1}`;
+                                        kingMoves.push(element);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             if(pieceAtSquare[0] === piece.oppColor) {
                 let element = `${target_row}${target_col}`;
@@ -181,6 +227,22 @@ function kingMove(piece) {
 
             if(data[0] === piece.oppColor) {
                 node.classList.add('enemy');
+            }
+
+            else if (element === "83" || element === "13"){
+                console.log(kingMoves);
+                if(kingMoves.includes("84") || kingMoves.includes("14")) {
+                    console.log(kingMoves);
+                    node.classList.add('enemy');
+                }
+            }
+
+            else if (element === "87" || element === "17"){
+                console.log(kingMoves);
+                if(kingMoves.includes("86") || kingMoves.includes("16")) {
+                    console.log(kingMoves);
+                    node.classList.add('enemy');
+                }
             }
 
             else {

@@ -78,7 +78,12 @@ function check(piece) {
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
                     console.log(pieceAtSquare);
 
-                    if (pieceAtSquare[0] === item.color) break;
+                    if (pieceAtSquare[0] === item.color) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                        break;
+                    };
+
                     if (pieceAtSquare[0] === item.oppColor) break;
                     
                     if (!pieceAtSquare) {
@@ -115,7 +120,7 @@ function check(piece) {
 
                 const pieceAtSquare = targetNode.getAttribute("data-piece");
 
-                if (!pieceAtSquare) {
+                if (!pieceAtSquare || pieceAtSquare[0] === item.color) {
                     let element = `${target_row}${target_col}`;
                     moves.push(element);
                 }
@@ -157,7 +162,12 @@ function check(piece) {
                         continue;
                     }
 
-                    if (pieceAtSquare[0] === item.color) break;
+                    if (pieceAtSquare[0] === item.color) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                        break;
+                    };
+
                     if (pieceAtSquare[0] === item.oppColor) break;
                     
                     dist++;
@@ -202,7 +212,12 @@ function check(piece) {
                         continue;
                     }
 
-                    if (pieceAtSquare[0] === item.color) break;
+                    if (pieceAtSquare[0] === item.color) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                        break;
+                    };
+
                     if (pieceAtSquare[0] === item.oppColor) break;
 
                     dist++;
@@ -238,6 +253,11 @@ function check(piece) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
                     }
+                    
+                    if (pieceAtSquare[0] === item.color) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                    };
                 }
             }
 
