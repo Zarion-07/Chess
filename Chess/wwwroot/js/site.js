@@ -31,7 +31,9 @@ function play(piece) {
     } 
     
     else {
-        if ((item.pieceName && item.color === to_Play)) {
+        const selected = document.querySelector(".highlightPiece");
+        const compare = new Piece(selected);
+        if ((item.pieceName && item.node !== compare.node && item.color === to_Play)) {
             Pieces(item, currentFEN);
         } else {
             const newFEN = Move(item, currentFEN);
@@ -40,7 +42,7 @@ function play(piece) {
             }
         }
     }
-    
+    Checkmate(currentFEN);
 }
 
 function Promotion() {

@@ -6,11 +6,6 @@ function check(piece) {
         case "WP":
             console.log(item.pieceName);
             if (item.row > 0) {
-                
-                if (item.row <= 7 && item.row > 0) {
-                    let element = `${item.row - 1}${item.col}`;
-                    moves.push(element);
-                }
 
                 let left = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col - 1}"]`);
                 let right = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col + 1}"]`);
