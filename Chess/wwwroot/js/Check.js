@@ -1,20 +1,18 @@
 function isPinned(piece) {
-    const oppColor = (piece.color === "W") ? "B" : "W";
-    const oppBishop = document.querySelector(`.square[data-piece=${oppColor}B]`);
-    const oppRook = document.querySelector(`.square[data-piece=${oppColor}R]`);
-    const oppQueen = document.querySelector(`.square[data-piece=${oppColor}Q]`);
+    const oppBishop = document.querySelector(`.square[data-piece=${piece.oppColor}B]`);
+    const oppRook = document.querySelector(`.square[data-piece=${piece.oppColor}R]`);
+    const oppQueen = document.querySelector(`.square[data-piece=${piece.oppColor}Q]`);
 
-    let array = [];
+    const pinMap = new Map();
 
     if (oppBishop) {
-
         oppBishop.forEach(element => {
             const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
+            let count = 0;
+            const pin = false;
 
             const traversingNode_Bishop = (rowDir, colDir) => {
                 const dist = 1;
-
-                let count = 0;
 
                 while(true) {
                     const target_row = item.row + rowDir*dist;
@@ -23,17 +21,28 @@ function isPinned(piece) {
                     if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
                     
                     const square_node = document.querySelector(`.square[data-row=${target_row}][data-col=${target_col}]`);
-                    const piecedata = square_node.dataset.piece;
-                    if (piecedata[0] === piece.color) {
+                    const square = new Piece(square_node);
+
+                    if (square.color === piece.oppColor) break;
+                    
+                    if (square.color === piece.color && square.node !== piece.node && square.pieceType !== "K") {
+                        break;
+                    }
+
+                    else if(square.node === piece.node) {
                         count += 1;
                     }
 
-                    if (piecedata[1] === "K" && count === 2) {
-                        array.push(element);
+                    else if(square.pieceType === "K") {
+                        pin = true;
+                    }
+
+                    if (pin === true) {
+                        const array = [rowDir, colDir];
+                        pinMap.set(element, array);
                         break;
                     }
                 }
-
             }
 
             iteration_Bishop.forEach(pair => {
@@ -108,8 +117,6 @@ function isPinned(piece) {
                         break;
                     }
                 }
-
-
             }
 
             iteration_Rook.forEach(pair => {
@@ -166,18 +173,23 @@ function kingMove(piece) {
 
                 else if (rowDir === 0 && colDir === -1) {
                     const castlingRights = currentFEN.split(" ")[2];
-                    const canCastle = piece.color === "W" ? castlingRights.includes("Q") : castlingRights.includes("q")
+                    const canCastle = piece.color === "W" ? castlingRights.includes("Q") : castlingRights.includes("q");
+
                     if (canCastle) {
-                        const castlingNode1 = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col - 1}"]`)
+                        const castlingNode1 = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col - 1}"]`);
+
                         if (castlingNode1) {
-                            const pieceAtCastling1 = castlingNode1.getAttribute("data-piece")
+                            const pieceAtCastling1 = castlingNode1.getAttribute("data-piece");
+
                             if (!pieceAtCastling1) {
                                 const castlingNode2 = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col - 2}"]`);
-                                const pieceAtCastling2 = castlingNode2?.getAttribute("data-piece")
+                                const pieceAtCastling2 = castlingNode2?.getAttribute("data-piece");
+
                                 if (!pieceAtCastling2) {
                                     // Verify rook exists
                                     const rookSquare = document.querySelector(`.square[data-row="${target_row}"][data-col="1"]`);
-                                    const rookPiece = rookSquare?.getAttribute("data-piece")
+                                    const rookPiece = rookSquare?.getAttribute("data-piece");
+
                                     if (rookPiece && rookPiece[0] === piece.color && rookPiece[1] === "R") {
                                         let element = `${target_row}${target_col - 1}`;
                                         kingMoves.push(element);
@@ -201,18 +213,18 @@ function kingMove(piece) {
         traversingNode_King(num1, num2);
     });
     console.log(kingMoves);
+    
     const oppPieces = document.querySelectorAll(`.square[data-piece^="${piece.oppColor}"]`);
     console.log(oppPieces);
     oppPieces.forEach(oppPiece => {
         const array = check(oppPiece);
-        console.log(array);
+        
         if(array) {
             array.forEach(element => {
             if (kingMoves.includes(element)) {  
                 const index = kingMoves.indexOf(element);
                 if (index !== -1) {
                     kingMoves.splice(index, 1);
-                    console.log(element);
                 }
             }
         });

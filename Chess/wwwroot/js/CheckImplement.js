@@ -30,11 +30,6 @@ function check(piece) {
             console.log(item.pieceName);
             if (item.row > 0) {
                 
-                if (item.row <= 7 && item.row > 0) {
-                    let element = `${item.row + 1}${item.col}`;
-                    moves.push(element);
-                }
-
                 let left = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col - 1}"]`);
                 let right = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col + 1}"]`);
 
@@ -79,7 +74,7 @@ function check(piece) {
                         break;
                     };
 
-                    if (pieceAtSquare[0] === item.oppColor) break;
+                    if (pieceAtSquare[0] === item.oppColor && pieceAtSquare[1] !== "K") break;
                     
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
@@ -163,7 +158,7 @@ function check(piece) {
                         break;
                     };
 
-                    if (pieceAtSquare[0] === item.oppColor) break;
+                    if (pieceAtSquare[0] === item.oppColor && pieceAtSquare[1] !== "K") break;
                     
                     dist++;
                 }
@@ -213,7 +208,7 @@ function check(piece) {
                         break;
                     };
 
-                    if (pieceAtSquare[0] === item.oppColor) break;
+                    if (pieceAtSquare[0] === item.oppColor && pieceAtSquare[1] !== "K") break;
 
                     dist++;
                 }
