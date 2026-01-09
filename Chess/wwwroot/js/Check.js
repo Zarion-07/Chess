@@ -1,47 +1,55 @@
 function isPinned(piece) {
-    const oppBishop = document.querySelector(`.square[data-piece=${piece.oppColor}B]`);
-    const oppRook = document.querySelector(`.square[data-piece=${piece.oppColor}R]`);
-    const oppQueen = document.querySelector(`.square[data-piece=${piece.oppColor}Q]`);
+    const oppBishop = document.querySelectorAll(`.square[data-piece="${piece.oppColor}B"]`);
+    const oppRook = document.querySelectorAll(`.square[data-piece="${piece.oppColor}R"]`);
+    const oppQueen = document.querySelectorAll(`.square[data-piece="${piece.oppColor}Q"]`);
 
     const pinMap = new Map();
 
     if (oppBishop) {
         oppBishop.forEach(element => {
+
             const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
-            let count = 0;
-            const pin = false;
+            const item = new Piece(element);
 
             const traversingNode_Bishop = (rowDir, colDir) => {
-                const dist = 1;
+                let dist = 1;
+                let foundPiece = false;
 
                 while(true) {
                     const target_row = item.row + rowDir*dist;
                     const target_col = item.col + colDir*dist;
-
-                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
-                    
-                    const square_node = document.querySelector(`.square[data-row=${target_row}][data-col=${target_col}]`);
-                    const square = new Piece(square_node);
-
-                    if (square.color === piece.oppColor) break;
-                    
-                    if (square.color === piece.color && square.node !== piece.node && square.pieceType !== "K") {
+                
+                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) {
+                        console.log("Out of bounds");
                         break;
                     }
 
-                    else if(square.node === piece.node) {
-                        count += 1;
+                    const square_node = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
+                    const square = new Piece(square_node);
+                    
+                    if (square.color === piece.oppColor) {
+                        console.log("Hit opponent piece");
+                        break;
                     }
 
-                    else if(square.pieceType === "K") {
-                        pin = true;
+                    if (square.color === piece.color && square.node !== piece.node && square.pieceType !== "K") {
+                        console.log("Hit our piece (not target or king)");
+                        break;
                     }
-
-                    if (pin === true) {
+                
+                    if (square.node === piece.node) {
+                        console.log("FOUND TARGET PIECE!");
+                        foundPiece = true;
+                    }
+                
+                    if (square.pieceType === "K" && square.color === piece.color && foundPiece) {
                         const array = [rowDir, colDir];
                         pinMap.set(element, array);
+                        console.log("Pin detected:", pinMap);
                         break;
                     }
+                
+                    dist++;
                 }
             }
 
@@ -54,33 +62,49 @@ function isPinned(piece) {
     }
 
     if (oppRook) {
-        oppRook.forEach( rook => {
+        oppRook.forEach( element => {
             const iteration_Rook = [[1,0], [0,1], [-1,0], [0,-1]];
+            const item = new Piece(element);
 
             const traversingNode_Rook = (rowDir, colDir) => {
-                dist = 1;
-
-                let count = 0;
+                let dist = 1;
+                let foundPiece = false;
 
                 while(true) {
                     const target_row = item.row + rowDir*dist;
                     const target_col = item.col + colDir*dist;
-
-                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
-                    
-                    const square_node = document.querySelector(`.square[data-row=${target_row}][data-col=${target_col}]`);
-                    const piecedata = square_node.dataset.piece;
-                    if (piecedata[0] === piece.color) {
-                        count += 1;
-                    }
-
-                    if (piecedata[1] === "K" && count === 2) {
-                        array.push(rook);
+                
+                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) {
+                        console.log("Out of bounds");
                         break;
                     }
+
+                    const square_node = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
+                    const square = new Piece(square_node);
+                    
+                    if (square.color === piece.oppColor) {
+                        console.log("Hit opponent piece");
+                        break;
+                    }
+
+                    if (square.color === piece.color && square.node !== piece.node && square.pieceType !== "K") {
+                        console.log("Hit our piece (not target or king)");
+                        break;
+                    }
+                
+                    if (square.node === piece.node) {
+                        console.log("FOUND TARGET PIECE!");
+                        foundPiece = true;
+                    }
+                
+                    if (square.pieceType === "K" && square.color === piece.color && foundPiece) {
+                        const array = [rowDir, colDir];
+                        pinMap.set(element, array);
+                        console.log("Pin detected:", pinMap);
+                        break;
+                    }
+                    dist++;
                 }
-
-
             }
 
             iteration_Rook.forEach(pair => {
@@ -92,42 +116,61 @@ function isPinned(piece) {
     }
 
     if (oppQueen) {
-        oppQueen.forEach( queen => {
-            const iteration_Rook = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
+        oppQueen.forEach( element => {
+            const iteration_Queen = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
+            const item = new Piece(element);
 
             const traversingNode_Queen = (rowDir, colDir) => {
-                dist = 1;
-
-                let count = 0;
+                let dist = 1;
+                let foundPiece = false;
 
                 while(true) {
                     const target_row = item.row + rowDir*dist;
                     const target_col = item.col + colDir*dist;
-
-                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
-                    
-                    const square_node = document.querySelector(`.square[data-row=${target_row}][data-col=${target_col}]`);
-                    const piecedata = square_node.dataset.piece;
-                    if (piecedata[0] === piece.color) {
-                        count += 1;
-                    }
-
-                    if (piecedata[1] === "K" && count === 2) {
-                        array.push(queen);
+                
+                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) {
+                        console.log("Out of bounds");
                         break;
                     }
+
+                    const square_node = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
+                    const square = new Piece(square_node);
+                    
+                    if (square.color === piece.oppColor) {
+                        console.log("Hit opponent piece");
+                        break;
+                    }
+
+                    if (square.color === piece.color && square.node !== piece.node && square.pieceType !== "K") {
+                        console.log("Hit our piece (not target or king)");
+                        break;
+                    }
+                
+                    if (square.node === piece.node) {
+                        console.log("FOUND TARGET PIECE!");
+                        foundPiece = true;
+                    }
+                
+                    if (square.pieceType === "K" && square.color === piece.color && foundPiece) {
+                        const array = [rowDir, colDir];
+                        pinMap.set(element, array);
+                        console.log("Pin detected:", pinMap);
+                        break;
+                    }
+                
+                    dist++;
                 }
             }
 
-            iteration_Rook.forEach(pair => {
+            iteration_Queen.forEach(pair => {
                 const num1 = pair[0];
                 const num2 = pair[1];
                 traversingNode_Queen(num1, num2);
             })
         })
-    }
+    } 
 
-    return array;
+    return pinMap;
 }
 
 function kingMove(piece) {

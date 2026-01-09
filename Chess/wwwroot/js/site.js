@@ -22,16 +22,69 @@ function play(piece) {
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
         if (!item.pieceName) return;
-        console.log(item);
+        
         if(item.pieceType === "K" && item.color === to_Play) {
             kingMove(item);
         } else {
+            const dict = isPinned(item);
+
+            if(dict) {
+                console.log(dict);
+                if(dict.size === 1) {
+                    
+                    const pinArray = Array.from(dict)[0];
+                    const node = new Piece(pinArray[0]);
+                    const array = [];
+                    const rowDir = pinArray[1][0];
+                    const colDir = pinArray[1][1];
+                    let dist = 0;
+                    while (true) {
+                        const allowedRow = node.row + rowDir*dist;
+                        const allowedCol = node.col + colDir*dist;
+                        const element = `${allowedRow}${allowedCol}`;
+                        console.log(element);
+                        if (allowedCol > 8 || allowedRow > 8 || allowedCol < 1 || allowedRow < 1) break;
+                        array.push(element);
+                        dist++;
+                    }
+
+                    const pieceArray = pinCheck(item.node);
+                    console.log(pieceArray, array);
+                    const commonMoves = array.filter(item => pieceArray.includes(item));
+
+                    commonMoves.forEach(move => {
+                        const targetNode = document.querySelector(`.square[data-row="${move[0]}"][data-col="${move[1]}"]`);
+                        const data = targetNode.getAttribute("data-piece");
+                        console.log(targetNode);
+                        if(data[0] === piece.oppColor) {
+                            targetNode.classList.add('enemy');
+                        }
+
+                        else {
+                            targetNode.classList.add('highlighted');
+                        }
+
+                        
+                    })
+                    Checkmate(currentFEN);
+                    return false;
+                }
+
+                else {
+                    Move(item, currentFEN);
+                }
+            }
             Pieces(item, currentFEN);
+
         }
     } 
     
     else {
         const selected = document.querySelector(".highlightPiece");
+
+        if(!selected) {
+            return false;
+        }
         const compare = new Piece(selected);
         if ((item.pieceName && item.node !== compare.node && item.color === to_Play)) {
             Pieces(item, currentFEN);
@@ -42,6 +95,7 @@ function play(piece) {
             }
         }
     }
+    
     Checkmate(currentFEN);
 }
 
