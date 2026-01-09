@@ -1,4 +1,4 @@
-﻿currentFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+﻿let currentFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 class Piece {
 
@@ -15,7 +15,6 @@ class Piece {
 
 function play(piece) {
     const item = new Piece(piece);
-
     const highlighted = document.querySelectorAll(".highlighted, .enemy, .highlightPiece");
     
     to_Play = currentFEN.split(" ")[1].toUpperCase();
@@ -28,54 +27,17 @@ function play(piece) {
         } else {
             const dict = isPinned(item);
 
-            if(dict) {
-                console.log(dict);
-                if(dict.size === 1) {
-                    
-                    const pinArray = Array.from(dict)[0];
-                    const node = new Piece(pinArray[0]);
-                    const array = [];
-                    const rowDir = pinArray[1][0];
-                    const colDir = pinArray[1][1];
-                    let dist = 0;
-                    while (true) {
-                        const allowedRow = node.row + rowDir*dist;
-                        const allowedCol = node.col + colDir*dist;
-                        const element = `${allowedRow}${allowedCol}`;
-                        console.log(element);
-                        if (allowedCol > 8 || allowedRow > 8 || allowedCol < 1 || allowedRow < 1) break;
-                        array.push(element);
-                        dist++;
-                    }
-
-                    const pieceArray = pinCheck(item.node);
-                    console.log(pieceArray, array);
-                    const commonMoves = array.filter(item => pieceArray.includes(item));
-
-                    commonMoves.forEach(move => {
-                        const targetNode = document.querySelector(`.square[data-row="${move[0]}"][data-col="${move[1]}"]`);
-                        const data = targetNode.getAttribute("data-piece");
-                        console.log(targetNode);
-                        if(data[0] === piece.oppColor) {
-                            targetNode.classList.add('enemy');
-                        }
-
-                        else {
-                            targetNode.classList.add('highlighted');
-                        }
-
-                        
-                    })
-                    Checkmate(currentFEN);
-                    return false;
-                }
-
-                else {
-                    Move(item, currentFEN);
-                }
+            if(dict && dict.size == 1) {
+                pinImplementation(dict, item, currentFEN);
+            } 
+            
+            else if(dict && dict.size >= 2) {
+                return;
             }
-            Pieces(item, currentFEN);
 
+            else {
+                Pieces(item, currentFEN);
+            }
         }
     } 
     
@@ -83,12 +45,39 @@ function play(piece) {
         const selected = document.querySelector(".highlightPiece");
 
         if(!selected) {
-            return false;
+            
+            document.querySelectorAll(".highlighted, .enemy")
+                .forEach(sq => sq.classList.remove("highlighted", "enemy"));
+            return;
         }
+        
         const compare = new Piece(selected);
+        
         if ((item.pieceName && item.node !== compare.node && item.color === to_Play)) {
-            Pieces(item, currentFEN);
-        } else {
+            
+            document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
+                .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy"));
+            
+            if(item.pieceType === "K") {
+                kingMove(item);
+            } else {
+                const dict = isPinned(item);
+
+                if(dict && dict.size == 1) {
+                    pinImplementation(dict, item, currentFEN);
+                }
+                
+                else if(dict && dict.size >= 2) {
+                    return;
+                }
+
+                else {
+                    Pieces(item, currentFEN);
+                }
+            }
+        } 
+       
+        else {
             const newFEN = Move(item, currentFEN);
             if (newFEN) {
                 currentFEN = newFEN;
@@ -99,25 +88,17 @@ function play(piece) {
     Checkmate(currentFEN);
 }
 
-function Promotion() {
-    const button = document.getElementById("Promotion");
-    const Promotion_box = document.getElementById("White_Promotion");
-    button.addEventListener('click', () => {
-        Promotion_box.style.display = 'block';
-    })
-}
-
 function Checkmate(currentFEN) {
     const parts = currentFEN.split(" ");
     const board = parts[0].split("/");
-    black = 0;
-    white = 0;
+    let black = 0;  
+    let white = 0;  
+    
     board.forEach(element => {
-        for(i = 0; i < 9; i++) {
+        for(let i = 0; i < element.length; i++) {
             if(element[i] === "k") {
                 black = 1;
             }
-
             if(element[i] === "K") {
                 white = 1;
             }            
@@ -132,6 +113,73 @@ function Checkmate(currentFEN) {
     }
 }
 
+function pinImplementation(dict, item, currentFEN) {
+    const pinArray = Array.from(dict)[0];
+    const node = new Piece(pinArray[0]);
+    const array = [];
+    const rowDir = pinArray[1][0];
+    const colDir = pinArray[1][1];
+    let dist = 0;
+    
+    while (true) {
+        const allowedRow = node.row + rowDir*dist;
+        const allowedCol = node.col + colDir*dist;
+        
+        if (allowedCol > 8 || allowedRow > 8 || allowedCol < 1 || allowedRow < 1) break;
+        
+        const element = `${allowedRow}${allowedCol}`;
+        array.push(element);
+        dist++;
+    }
+    const pieceArray = pinCheck(item.node);
+    const commonMoves = array.filter(move => pieceArray.includes(move));
+
+    if (commonMoves.length > 0) {
+        item.node.classList.add('highlightPiece');
+        
+        commonMoves.forEach(move => {
+            const targetNode = document.querySelector(`.square[data-row="${move[0]}"][data-col="${move[1]}"]`);
+            if (targetNode) {
+                const dataPiece = targetNode.getAttribute("data-piece");
+
+                let data = currentFEN.split(" ")[3];
+                let file = data[0];
+                file = file.charCodeAt(0) - '`'.charCodeAt(0);
+                let enPassantCol = parseInt(file);
+                
+                if (data != "-" && (Math.abs(enPassantCol - item.col) === 1) && item.row === 4 && item.pieceName === "WP") {
+
+                    let enPassantSq = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${enPassantCol}"]`);
+                    const pieceAtSquare3 = enPassantSq.getAttribute("data-piece");
+                    console.log("W");
+                    if (!pieceAtSquare3 && enPassantCol == move[1] && item.row == 4) {
+                        targetNode.classList.add('enemy');
+                        return;
+                    }
+                } 
+
+                if (data != "-" && (Math.abs(enPassantCol - item.col) === 1) && item.row === 5 && item.pieceName === "BP") {
+
+                    let enPassantSq = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${enPassantCol}"]`);
+                    const pieceAtSquare3 = enPassantSq.getAttribute("data-piece");
+                    
+                    if (!pieceAtSquare3 && enPassantCol == move[1] && move[0] == 5) {
+                        targetNode.classList.add('enemy');
+                        return;
+                    }
+                }
+
+                if(dataPiece && dataPiece[0] === item.oppColor) {
+                    targetNode.classList.add('enemy');
+                } else {
+                    console.log("a");
+                    targetNode.classList.add('highlighted');
+                }
+            }
+        });
+        return;
+    }
+}
 function victoryBlack() {
     console.log("YEs");
     div = document.querySelector(".container-VB");

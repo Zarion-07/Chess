@@ -266,10 +266,11 @@ function pinCheck(piece) {
     let moves = [];
     
     switch (item.pieceName) {
+
         case "WP":
             console.log(item.pieceName);
             if (item.row > 0) {
-                if (item.row <= 7 && item.row > 0) {
+                if (item.row < 8) {
                     let one = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col}"]`);
                     const pieceAtSquare = one.getAttribute("data-piece");
                     if (!pieceAtSquare) {
@@ -330,7 +331,7 @@ function pinCheck(piece) {
         case "BP":
             console.log(item.pieceName);
             if (item.row > 0) {
-                if (item.row <= 7 && item.row > 0) {
+                if (item.row < 8) {
                     let one = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col}"]`);
                     const pieceAtSquare = one.getAttribute("data-piece");
                     if (!pieceAtSquare) {
@@ -339,7 +340,7 @@ function pinCheck(piece) {
                     }
                 }
 
-                if (item.row === 7) {
+                if (item.row === 2) {
                     let two = document.querySelector(`.square[data-row="${item.row - 2}"][data-col="${item.col}"]`);
                     if (two) {
                         const pieceAtSquare1 = two.getAttribute("data-piece");
@@ -350,8 +351,8 @@ function pinCheck(piece) {
                     }
                 }
 
-                let left = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col - 1}"]`);
-                let right = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col + 1}"]`);
+                let left = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col - 1}"]`);
+                let right = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col + 1}"]`);
 
                 if (left) {
                     const leftPiece = left.getAttribute("data-piece");
@@ -374,9 +375,9 @@ function pinCheck(piece) {
                 file = file.charCodeAt(0) - '`'.charCodeAt(0);
                 let enPassantCol = parseInt(file);
                 
-                if (data != "-" && (Math.abs(enPassantCol - item.col) === 1) && item.row === 4) {
+                if (data != "-" && (Math.abs(enPassantCol - item.col) === 1) && item.row === 5) {
 
-                    let enPassantSq = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${enPassantCol}"]`);
+                    let enPassantSq = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${enPassantCol}"]`);
                     const pieceAtSquare3 = enPassantSq.getAttribute("data-piece");
                     
                     if (!pieceAtSquare3) {
@@ -420,6 +421,50 @@ function pinCheck(piece) {
 
             return moves;
         
+        case "WB":
+            
+        case "BB":
+            console.log(item.pieceName);
+            const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
+            const traversingNode_Bishop = (rowDir, colDir) => {
+                let dist = 1;
+
+                while(true) {
+                    const target_row = item.row + rowDir*dist;
+                    const target_col = item.col + colDir*dist;
+
+                    if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
+
+                    const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
+                    if (!targetNode) break;
+                
+                    const pieceAtSquare = targetNode.getAttribute("data-piece");
+                    console.log(pieceAtSquare);
+
+                    if (pieceAtSquare[0] === item.oppColor) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                        break;
+                    };
+
+                    if (pieceAtSquare[0] === item.color) break;
+                    
+                    if (!pieceAtSquare) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                    }
+                    dist++;
+                }
+            }
+
+            iteration_Bishop.forEach(pair => {
+                const num1 = pair[0];
+                const num2 = pair[1];
+                traversingNode_Bishop(num1, num2);
+            });
+
+            return moves;
+        
         case "WR":
 
         case "BR":
@@ -448,13 +493,18 @@ function pinCheck(piece) {
                         continue;
                     }
 
-                    if (pieceAtSquare[0] === item.color) {
+                    if (pieceAtSquare[0] === item.oppColor) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
                         break;
                     };
 
-                    if (pieceAtSquare[0] === item.oppColor && pieceAtSquare[1] !== "K") break;
+                    if (pieceAtSquare[0] === item.color) break;
+                    
+                    if (!pieceAtSquare) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                    }
                     
                     dist++;
                 }
@@ -498,13 +548,18 @@ function pinCheck(piece) {
                         continue;
                     }
 
-                    if (pieceAtSquare[0] === item.color) {
+                    if (pieceAtSquare[0] === item.oppColor) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
                         break;
                     };
 
-                    if (pieceAtSquare[0] === item.oppColor && pieceAtSquare[1] !== "K") break;
+                    if (pieceAtSquare[0] === item.color) break;
+                    
+                    if (!pieceAtSquare) {
+                        let element = `${target_row}${target_col}`;
+                        moves.push(element);
+                    }
 
                     dist++;
                 }
