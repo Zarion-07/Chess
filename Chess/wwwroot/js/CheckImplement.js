@@ -1,7 +1,7 @@
 function check(piece) {
     const item = new Piece(piece);
     let moves = [];
-    
+    let inCheck = 0;
     switch (item.pieceName) {
         case "WP":
             console.log(item.pieceName);
@@ -13,14 +13,15 @@ function check(piece) {
                 if (left) {
                     let element = `${item.row - 1}${item.col - 1}`;
                     moves.push(element);
-                    
                 }
 
                 if (right) {
-                    
                     let element = `${item.row - 1}${item.col + 1}`;
-                    moves.push(element);
-                    
+                    moves.push(element)
+                }
+
+                if(kingDanger(left) === 1 || kingDanger(right) === 1) {
+                    moves.push(1);
                 }
             }
             
@@ -36,13 +37,15 @@ function check(piece) {
                 if (left) {
                     let element = `${item.row + 1}${item.col - 1}`;
                     moves.push(element);
-                    
                 }
 
                 if (right) {
                     let element = `${item.row + 1}${item.col + 1}`;
                     moves.push(element);
-                    
+                }
+
+                if(kingDanger(left) === 1 || kingDanger(right) === 1) {
+                    moves.push(1);
                 }
             }
             
@@ -258,6 +261,15 @@ function check(piece) {
             });
 
             return moves;
+    }
+}
+
+function kingDanger(node) {
+    const piece = node.dataset.piece;
+    if(piece[1] === "K") {
+        return 1;
+    } else {
+        return 0;
     }
 }
 

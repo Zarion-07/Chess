@@ -79,12 +79,13 @@ function play(piece) {
        
         else {
             const newFEN = Move(item, currentFEN);
+            console.log(newFEN)
             if (newFEN) {
                 currentFEN = newFEN;
             }
         }
     }
-    
+    console.log(currentFEN);
     Checkmate(currentFEN);
 }
 

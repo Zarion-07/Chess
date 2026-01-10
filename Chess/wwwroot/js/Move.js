@@ -40,42 +40,33 @@ function Move(square, currentFEN) {
 
         const parts = currentFEN.split(" ");
         let castling = parts[2].split("");
-
         if (origin.pieceType === "R" && (castling[0] === "K" || castling[3] === "q") && origin.col === 8) {
             if (origin.color === "W") {
-                castling[0] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
+                castling.splice(0, 1, "-");
+            } else {
+                castling.splice(3, 1, "-");
             }
-
-            else {
-                castling[3] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
-            }
+            parts[2] = castling.join("");
+            currentFEN = parts.join(" ");
         }
 
         if (origin.pieceType === "R" && (castling[1] === "Q" || castling[2] === "k") && origin.col === 1) {
             if (origin.color === "W") {
-                castling[1] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
+                castling.splice(1, 1, "-");
+            } else {
+                castling.splice(2, 1, "-");
             }
-
-            else {
-                castling[2] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
-            }
+            parts[2] = castling.join("");
+            currentFEN = parts.join(" ");
         }
 
         if (origin.pieceName === "WK" && (castling[0] === "K" || castling[1] === "Q")) {
-
+            console.log("exist");
             const Qnode = document.querySelector(`.enemy[data-row="8"][data-col="3"]`);
             const Knode = document.querySelector(`.enemy[data-row="8"][data-col="7"]`);
 
             if (Qnode && square.col === 3) {
-                
+                console.log(Qnode);
                 currentRook = document.querySelector(`[data-row="8"][data-col="1"]`);
                 currentRook.setAttribute("data-piece", "");
                 currentRook.innerHTML = "";
@@ -86,16 +77,16 @@ function Move(square, currentFEN) {
 
                 var Rook = new Piece(newRook);
                 castleFEN = castlingFEN(origin, Rook, currentFEN);
-
-                castling[0] = "-";
-                castling[1] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
+                const castlePart = castleFEN.split(" ");
+                castling.splice(0, 1, "-");
+                castling.splice(1, 1);
+                castlePart[2] = castling.join("");
+                currentFEN = castlePart.join(" ");
                 special = 1;
             }
 
             else if (Knode && square.col === 7) {
-
+                console.log(Knode);
                 currentRook = document.querySelector(`[data-row="8"][data-col="8"]`);
                 currentRook.setAttribute("data-piece", "");
                 currentRook.innerHTML = "";
@@ -106,43 +97,44 @@ function Move(square, currentFEN) {
                 
                 var Rook = new Piece(newRook);
                 castleFEN = castlingFEN(origin, Rook, currentFEN);
-
-                castling[0] = "-";
-                castling[1] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
+                const castlePart = castleFEN.split(" ");
+                castling.splice(0, 1, "-");
+                castling.splice(1, 1);
+                
+                castlePart[2] = castling.join("");
+                currentFEN = castlePart.join(" ");
                 special = 1;
             }
             
         }
 
-        if (origin.pieceName === "BK" && (castling[2] === "k" || castling[3] === "q")) {
-
-            const Qnode = document.querySelector(`.enemy[data-row="1"][data-col="3"]`);
+        else if (origin.pieceName === "BK" && (castling[2] === "k" || castling[3] === "q")) {
+            
             const Knode = document.querySelector(`.enemy[data-row="1"][data-col="7"]`);
-
+            const Qnode = document.querySelector(`.enemy[data-row="1"][data-col="3"]`);
             if (Qnode && square.col === 3) {
-                
-                currentRook = document.querySelector(`[data-row="1"][data-col="1"]`);
+                console.log(Qnode);
+                const currentRook = document.querySelector(`[data-row="1"][data-col="1"]`);
                 currentRook.setAttribute("data-piece", "");
                 currentRook.innerHTML = "";
 
-                newRook = document.querySelector(`[data-row="1"][data-col="4"]`);
+                const newRook = document.querySelector(`[data-row="1"][data-col="4"]`);
                 newRook.innerHTML = `<img src="/Images/BR.png" alt="BR" />`;
                 newRook.setAttribute("data-piece", "BR");
 
                 var Rook = new Piece(newRook);
                 castleFEN = castlingFEN(origin, Rook, currentFEN);
+                const castlePart = castleFEN.split(" ");
 
-                castling[2] = "-";
-                castling[3] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
+                castling.splice(2, 1, "-");
+                castling.splice(3, 1);
+                castlePart[2] = castling.join("");
+                currentFEN = castlePart.join(" ");
                 special = 1;
             }
 
             else if (Knode && square.col === 7) {
-
+                console.log(Knode);
                 currentRook = document.querySelector(`[data-row="1"][data-col="8"]`);
                 currentRook.setAttribute("data-piece", "");
                 currentRook.innerHTML = "";
@@ -153,11 +145,11 @@ function Move(square, currentFEN) {
 
                 var Rook = new Piece(newRook);
                 castleFEN = castlingFEN(origin, Rook, currentFEN);
-
-                castling[2] = "-";
-                castling[3] = "-";
-                parts[2] = castling.join("");
-                currentFEN = parts.join(" ");
+                const castlePart = castleFEN.split(" ");
+                castling.splice(2, 1, "-");
+                castling.splice(3, 1);
+                castlePart[2] = castling.join("");
+                currentFEN = castlePart.join(" ");
                 special = 1;
             }
         }
@@ -174,7 +166,7 @@ function Move(square, currentFEN) {
         }
         
         else {
-            let newFEN = castleFEN;
+            let newFEN = currentFEN;
             return newFEN;
         }
     }
