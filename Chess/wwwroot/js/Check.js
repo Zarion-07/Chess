@@ -20,7 +20,6 @@ function isPinned(piece) {
                     const target_col = item.col + colDir*dist;
                 
                     if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) {
-                        console.log("Out of bounds");
                         break;
                     }
 
@@ -28,24 +27,20 @@ function isPinned(piece) {
                     const square = new Piece(square_node);
                     
                     if (square.color === piece.oppColor) {
-                        console.log("Hit opponent piece");
                         break;
                     }
 
                     if (square.color === piece.color && square.node !== piece.node && square.pieceType !== "K") {
-                        console.log("Hit our piece (not target or king)");
                         break;
                     }
                 
                     if (square.node === piece.node) {
-                        console.log("FOUND TARGET PIECE!");
                         foundPiece = true;
                     }
                 
                     if (square.pieceType === "K" && square.color === piece.color && foundPiece) {
                         const array = [rowDir, colDir];
                         pinMap.set(element, array);
-                        console.log("Pin detected:", pinMap);
                         break;
                     }
                 
@@ -255,7 +250,6 @@ function kingMove(piece) {
         const num2 = pair[1];
         traversingNode_King(num1, num2);
     });
-    console.log(kingMoves);
     
     const oppPieces = document.querySelectorAll(`.square[data-piece^="${piece.oppColor}"]`);
     console.log(oppPieces);
@@ -274,6 +268,11 @@ function kingMove(piece) {
         }
     })
 
+    kingPlace(kingMoves, piece);
+    return kingMoves;
+}
+
+function kingPlace(kingMoves, piece) {
     if(kingMoves) {
         console.log(kingMoves);
         kingMoves.forEach(element => {

@@ -3,27 +3,35 @@
 class Piece {
 
     constructor (piece) {
-            this.node = piece;
-            this.pieceName = piece.getAttribute("data-piece");
-            this.row = parseInt(piece.getAttribute("data-row"));
-            this.col = parseInt(piece.getAttribute("data-col"));
-            this.color = this.pieceName ? this.pieceName[0] : null;
-            this.pieceType = this.pieceName ? this.pieceName[1] : null;
-            this.oppColor = this.color === "W" ? "B" : "W";
+        this.node = piece;
+        this.pieceName = piece.getAttribute("data-piece");
+        this.row = parseInt(piece.getAttribute("data-row"));
+        this.col = parseInt(piece.getAttribute("data-col"));
+        this.color = this.pieceName ? this.pieceName[0] : null;
+        this.pieceType = this.pieceName ? this.pieceName[1] : null;
+        this.oppColor = this.color === "W" ? "B" : "W";
     }
+}
+
+let CheckCase = {
+    node : null,
+    checked : false,
+    possibleMoves : null, 
+    checkmated : false
 }
 
 function play(piece) {
     const item = new Piece(piece);
     const highlighted = document.querySelectorAll(".highlighted, .enemy, .highlightPiece");
-    
     to_Play = currentFEN.split(" ")[1].toUpperCase();
+
+    if(CheckCase.checkmated === true) return;
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
         if (!item.pieceName) return;
         
         if(item.pieceType === "K" && item.color === to_Play) {
-            kingMove(item);
+            const move = kingMove(item);
         } else {
             const dict = isPinned(item);
 
@@ -59,7 +67,7 @@ function play(piece) {
                 .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy"));
             
             if(item.pieceType === "K") {
-                kingMove(item);
+                const move = kingMove(item);
             } else {
                 const dict = isPinned(item);
 
@@ -80,39 +88,62 @@ function play(piece) {
         else {
             const newFEN = Move(item, currentFEN);
             const inCheck = check(piece).at(-1);
-            console.log(inCheck);
+
+            if(inCheck == "1") {
+                CheckCase.checked = true;
+                CheckCase.node = piece;
+            } else {
+                CheckCase.checked = false;
+                CheckCase.node = null;
+            }
+            console.log(CheckCase);
+
             if (newFEN) {
                 currentFEN = newFEN;
             }
         }
     }
-    console.log(currentFEN);
-    Checkmate(currentFEN);
+
+    if(CheckCase.checked === true) {
+        const possibleMoves = isCheckmated(item);
+        if(possibleMoves.includes(0)) return;
+
+        if(possibleMoves) CheckCase.possibleMoves = possibleMoves;
+        else CheckCase.checkmated = true;
+    }
 }
 
-function Checkmate(currentFEN) {
-    const parts = currentFEN.split(" ");
-    const board = parts[0].split("/");
-    let black = 0;  
-    let white = 0;  
-    
-    board.forEach(element => {
-        for(let i = 0; i < element.length; i++) {
-            if(element[i] === "k") {
-                black = 1;
-            }
-            if(element[i] === "K") {
-                white = 1;
-            }            
-        }
-    });
+function isCheckmated(item) {
+    const enemyKing = document.querySelector(`.square[data-piece="${item.oppColor}K"]`)
 
-    if(white === 0) {
-        victoryBlack();
+    if(kingMove(enemyKing) !== null) return [0];
+
+    const pieces = document.querySelectorAll(`.square[data-piece^="${item.color}"`);
+    const checks = [];
+    pieces.forEach ((piece) => {
+        let move = check(piece);
+        if(move.at(-1) === "1") {
+            move.splice(-1,2);
+            checks.push(move);
+        }
+    })
+
+    if (checks.length > 1) {
+        if(item.color === "W") {
+            victoryWhite();
+            return null;
+        } else {
+            victoryBlack();
+            return null;
+        }
     }
-    if(black === 0) {
-        victoryWhite();
-    }
+
+    const oppPieces = document.querySelectorAll(`.square[data-piece^="${item.oppColor}"`);
+    oppPieces.forEach ((piece) => {
+        let move = check(piece);
+        const commonElements = move.filter(value => checks[0].includes(value));
+        return commonElements;
+    })
 }
 
 function pinImplementation(dict, item, currentFEN) {
