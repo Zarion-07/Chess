@@ -2,9 +2,9 @@ function check(piece) {
     const item = new Piece(piece);
     let moves = [];
     let inCheck = 0;
+    console.log(inCheck);
     switch (item.pieceName) {
         case "WP":
-            console.log(item.pieceName);
             if (item.row > 0) {
 
                 let left = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col - 1}"]`);
@@ -13,22 +13,21 @@ function check(piece) {
                 if (left) {
                     let element = `${item.row - 1}${item.col - 1}`;
                     moves.push(element);
+                    if(kingDanger(left, piece) === 1) inCheck = 1;
                 }
 
                 if (right) {
                     let element = `${item.row - 1}${item.col + 1}`;
-                    moves.push(element)
+                    moves.push(element);
+                    if(kingDanger(right, piece) === 1) inCheck = 1;
                 }
 
-                if(kingDanger(left) === 1 || kingDanger(right) === 1) {
-                    moves.push(1);
-                }
+                if(inCheck === 1) moves.push("1");
             }
             
             return moves;
         
         case "BP":
-            console.log(item.pieceName);
             if (item.row > 0) {
                 
                 let left = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col - 1}"]`);
@@ -37,16 +36,16 @@ function check(piece) {
                 if (left) {
                     let element = `${item.row + 1}${item.col - 1}`;
                     moves.push(element);
+                    if(kingDanger(left, piece) === 1) inCheck = 1;
                 }
 
                 if (right) {
                     let element = `${item.row + 1}${item.col + 1}`;
                     moves.push(element);
+                    if(kingDanger(right, piece) === 1) inCheck = 1;
                 }
 
-                if(kingDanger(left) === 1 || kingDanger(right) === 1) {
-                    moves.push(1);
-                }
+                if(inCheck === 1) moves.push("1");
             }
             
             return moves;
@@ -54,7 +53,6 @@ function check(piece) {
         case "WB":
             
         case "BB":
-            console.log(item.pieceName);
             const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
             const traversingNode_Bishop = (rowDir, colDir) => {
                 dist = 1;
@@ -83,6 +81,10 @@ function check(piece) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
                     }
+
+                    if(kingDanger(targetNode, piece) === 1) {
+                        inCheck = 1;
+                    }
                     dist++;
                 }
             }
@@ -93,12 +95,12 @@ function check(piece) {
                 traversingNode_Bishop(num1, num2);
             });
 
+            if(inCheck === 1) moves.push("1");
             return moves;
 
         case "WN":
             
         case "BN":
-            console.log(item.pieceName);
             const iteration_Knight = [[1,2], [-1,2], [-1,-2], [1,-2], [2,-1], [2,1], [-2,-1], [-2,1]];
 
             const traversingNode_Knight = (rowDir, colDir) => {
@@ -110,13 +112,14 @@ function check(piece) {
 
                 const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
                 if (!targetNode) return;
-
                 const pieceAtSquare = targetNode.getAttribute("data-piece");
 
                 if (!pieceAtSquare || pieceAtSquare[0] === item.color) {
                     let element = `${target_row}${target_col}`;
                     moves.push(element);
                 }
+
+                if(kingDanger(targetNode, piece)) inCheck = 1;
             }
 
             iteration_Knight.forEach(pair => {
@@ -124,13 +127,12 @@ function check(piece) {
                 const num2 = pair[1];
                 traversingNode_Knight(num1, num2);
             });
-
+            if(inCheck === 1) moves.push("1");
             return moves;
         
         case "WR":
 
         case "BR":
-            console.log(item.pieceName);
             const iteration_Rook = [[1,0], [0,1], [-1,0], [0,-1]];
 
             const traversingNode_Rook = (rowDir, colDir) => {
@@ -147,6 +149,8 @@ function check(piece) {
                     if (!targetNode) break;
                 
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
+
+                    if(kingDanger(targetNode, piece)) inCheck = 1;
                     
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
@@ -174,13 +178,13 @@ function check(piece) {
                 const num2 = pair[1];
                 traversingNode_Rook(num1, num2);
             });
+            if(inCheck === 1) moves.push("1");
 
             return moves;
         
         case "WQ":
 
         case "BQ":
-            console.log(item.pieceName);
             const iteration_Queen = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
 
             const traversingNode_Queen = (rowDir, colDir) => {
@@ -197,6 +201,8 @@ function check(piece) {
                     if (!targetNode) break;
                 
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
+
+                    if(kingDanger(targetNode, piece)) inCheck = 1;
                     
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
@@ -225,6 +231,7 @@ function check(piece) {
                 traversingNode_Queen(num1, num2);
             });
 
+            if(inCheck === 1) moves.push("1");
             return moves;
 
         case "BK":
@@ -238,10 +245,11 @@ function check(piece) {
                 const target_row = item.row + rowDir;
             
                 const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
-            
+                console.log(targetNode)
                 if (targetNode) {
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
-                
+                    console.log(targetNode)
+                    if(kingDanger(targetNode, piece)) inCheck = 1;
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
@@ -251,7 +259,7 @@ function check(piece) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
                     };
-                }
+                } else return;
             }
 
             iteration.forEach(pair => {
@@ -264,9 +272,10 @@ function check(piece) {
     }
 }
 
-function kingDanger(node) {
-    const piece = node.dataset.piece;
-    if(piece[1] === "K") {
+function kingDanger(node, piece) {
+    const opp = node.dataset.piece;
+    const color = (piece.dataset.piece[0] === "W") ? "B" : "W";
+    if(opp === `${color[0]}K`) {
         return 1;
     } else {
         return 0;

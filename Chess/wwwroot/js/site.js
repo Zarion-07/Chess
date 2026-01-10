@@ -79,7 +79,8 @@ function play(piece) {
        
         else {
             const newFEN = Move(item, currentFEN);
-            console.log(newFEN)
+            const inCheck = check(piece).at(-1);
+            console.log(inCheck);
             if (newFEN) {
                 currentFEN = newFEN;
             }
