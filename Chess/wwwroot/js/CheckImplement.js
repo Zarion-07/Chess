@@ -245,10 +245,8 @@ function check(piece) {
                 const target_row = item.row + rowDir;
             
                 const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
-                console.log(targetNode)
                 if (targetNode) {
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
-                    console.log(targetNode)
                     if(kingDanger(targetNode, piece)) inCheck = 1;
                     if (!pieceAtSquare) {
                         let element = `${target_row}${target_col}`;
@@ -289,7 +287,6 @@ function pinCheck(piece) {
     switch (item.pieceName) {
 
         case "WP":
-            console.log(item.pieceName);
             if (item.row > 0) {
                 if (item.row < 8) {
                     let one = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col}"]`);
@@ -346,14 +343,13 @@ function pinCheck(piece) {
                     }
                 }  
             }
-            console.log(moves);
             return moves;
         
         case "BP":
-            console.log(item.pieceName);
             if (item.row > 0) {
                 if (item.row < 8) {
-                    let one = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col}"]`);
+                    let one = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col}"]`);
+                    
                     const pieceAtSquare = one.getAttribute("data-piece");
                     if (!pieceAtSquare) {
                         let element = `${item.row + 1}${item.col}`;
@@ -362,7 +358,8 @@ function pinCheck(piece) {
                 }
 
                 if (item.row === 2) {
-                    let two = document.querySelector(`.square[data-row="${item.row - 2}"][data-col="${item.col}"]`);
+                    let two = document.querySelector(`.square[data-row="${item.row + 2}"][data-col="${item.col}"]`);
+                    
                     if (two) {
                         const pieceAtSquare1 = two.getAttribute("data-piece");
                         if (!pieceAtSquare1) {
@@ -413,7 +410,6 @@ function pinCheck(piece) {
         case "WN":
             
         case "BN":
-            console.log(item.pieceName);
             const iteration_Knight = [[1,2], [-1,2], [-1,-2], [1,-2], [2,-1], [2,1], [-2,-1], [-2,1]];
 
             const traversingNode_Knight = (rowDir, colDir) => {
@@ -445,7 +441,6 @@ function pinCheck(piece) {
         case "WB":
             
         case "BB":
-            console.log(item.pieceName);
             const iteration_Bishop = [[1,-1], [1,1], [-1,-1], [-1,1]];
             const traversingNode_Bishop = (rowDir, colDir) => {
                 let dist = 1;
@@ -460,7 +455,6 @@ function pinCheck(piece) {
                     if (!targetNode) break;
                 
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
-                    console.log(pieceAtSquare);
 
                     if (pieceAtSquare[0] === item.oppColor) {
                         let element = `${target_row}${target_col}`;
@@ -489,7 +483,6 @@ function pinCheck(piece) {
         case "WR":
 
         case "BR":
-            console.log(item.pieceName);
             const iteration_Rook = [[1,0], [0,1], [-1,0], [0,-1]];
 
             const traversingNode_Rook = (rowDir, colDir) => {
@@ -544,7 +537,6 @@ function pinCheck(piece) {
         case "WQ":
 
         case "BQ":
-            console.log(item.pieceName);
             const iteration_Queen = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
 
             const traversingNode_Queen = (rowDir, colDir) => {
@@ -599,7 +591,6 @@ function pinCheck(piece) {
         case "BK":
 
         case "WK":
-            console.log(item.pieceName);
             const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
             const traversingNode_King = (rowDir, colDir) => {
 

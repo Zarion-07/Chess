@@ -14,29 +14,34 @@ class Piece {
 }
 
 let CheckCase = {
-    node : null,
+    node : [],
     checked : false,
-    possibleMoves : null, 
-    checkmated : false
+    possibleMoves : [], 
+    kingMoves : [],
+    checkmated : false,
+    testing : false,
+    
 }
 
 function play(piece) {
     const item = new Piece(piece);
     const highlighted = document.querySelectorAll(".highlighted, .enemy, .highlightPiece");
     to_Play = currentFEN.split(" ")[1].toUpperCase();
-
-    if(CheckCase.checkmated === true) return;
+    let moveMade = false;
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
+        console.log(item);
         if (!item.pieceName) return;
         
         if(item.pieceType === "K" && item.color === to_Play) {
-            const move = kingMove(item);
+            kingMove(item);
+            return;
         } else {
             const dict = isPinned(item);
-
+            console.log(dict);
             if(dict && dict.size == 1) {
                 pinImplementation(dict, item, currentFEN);
+                console.log(dict);
             } 
             
             else if(dict && dict.size >= 2) {
@@ -44,7 +49,33 @@ function play(piece) {
             }
 
             else {
-                Pieces(item, currentFEN);
+                console.log(dict);
+                if(CheckCase.testing === true) {
+                    moves = pinCheck(piece);
+                    console.log(CheckCase.possibleMoves);
+                    const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
+                    console.log(moves);
+                    if(commonElements.length > 0) {
+                        item.node.classList.add('highlightPiece');
+                        commonElements.forEach(element => {
+                            const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
+                            const data = node.getAttribute("data-piece");
+                            console.log(element);
+                            if(data[0] === item.oppColor) {
+                                node.classList.add('enemy');
+                                CheckCase.checked = false;
+                            }
+                        
+                            else{
+                                node.classList.add('highlighted');
+                                CheckCase.checked = false;
+                            }
+
+                        })
+                    }
+                } else {
+                    Pieces(item, currentFEN);
+                }
             }
         }
     } 
@@ -53,25 +84,28 @@ function play(piece) {
         const selected = document.querySelector(".highlightPiece");
 
         if(!selected) {
-            
+            console.log(item);
             document.querySelectorAll(".highlighted, .enemy")
                 .forEach(sq => sq.classList.remove("highlighted", "enemy"));
             return;
         }
         
         const compare = new Piece(selected);
-        
+        console.log(item)
         if ((item.pieceName && item.node !== compare.node && item.color === to_Play)) {
             
             document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
                 .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy"));
             
             if(item.pieceType === "K") {
-                const move = kingMove(item);
+                kingMove(item);
+
+                return;
             } else {
+                
                 const dict = isPinned(item);
 
-                if(dict && dict.size == 1) {
+                if(dict && dict.size == 1 && CheckCase.testing === false) {
                     pinImplementation(dict, item, currentFEN);
                 }
                 
@@ -80,22 +114,51 @@ function play(piece) {
                 }
 
                 else {
-                    Pieces(item, currentFEN);
+                    if(CheckCase.testing === true) {
+                        moves = pinCheck(piece);
+                        console.log(CheckCase.possibleMoves);
+                        const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
+                        console.log(moves);
+                        if(commonElements.length > 0) {
+                            item.node.classList.add('highlightPiece');
+                            commonElements.forEach(element => {
+                                const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
+                                const data = node.getAttribute("data-piece");
+                                console.log(element);
+                                if(data[0] === item.oppColor) {
+                                    node.classList.add('enemy');
+                                    CheckCase.checked = false;
+                                }
+                            
+                                else{
+                                    node.classList.add('highlighted');
+                                    CheckCase.checked = false;
+                                }
+
+                            })
+                        }
+                    } else {
+                        Pieces(item, currentFEN);
+                    }
                 }
             }
         } 
+
+        else if(item.node === compare.node) {
+            document.querySelectorAll(".highlighted, .enemy")
+                .forEach(sq => sq.classList.remove("highlighted", "enemy"));
+            return;
+        }
        
         else {
             const newFEN = Move(item, currentFEN);
-            const inCheck = check(piece).at(-1);
-
-            if(inCheck == "1") {
-                CheckCase.checked = true;
-                CheckCase.node = piece;
-            } else {
-                CheckCase.checked = false;
-                CheckCase.node = null;
-            }
+            moveMade = true;
+            if(CheckCase.testing === true) CheckCase.testing = false;
+            const destinationSquare = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
+            const movedPiece = new Piece(destinationSquare);
+    
+            console.log(movedPiece); // This should now have the correct piece data
+            inCheck(movedPiece);     // Pass the new piece object
             console.log(CheckCase);
 
             if (newFEN) {
@@ -104,31 +167,46 @@ function play(piece) {
         }
     }
 
-    if(CheckCase.checked === true) {
-        const possibleMoves = isCheckmated(item);
-        if(possibleMoves.includes(0)) return;
+    if(CheckCase.checked === true && moveMade) {
+        const destinationSquare = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
+        const movedPiece = new Piece(destinationSquare);
+        const possibleMoves = isCheckmated(movedPiece);
 
-        if(possibleMoves) CheckCase.possibleMoves = possibleMoves;
+        console.log(possibleMoves);
+        if(possibleMoves) CheckCase.checkmated = false;
         else CheckCase.checkmated = true;
     }
 }
 
 function isCheckmated(item) {
-    const enemyKing = document.querySelector(`.square[data-piece="${item.oppColor}K"]`)
+    const enemyKing = new Piece(document.querySelector(`.square[data-piece="${item.oppColor}K"]`));
+    const kingMoves = kingMoveCheck(enemyKing);
+    if(kingMoves.length > 0) {
+        CheckCase.kingMoves.push(...kingMoves);
+    }
 
-    if(kingMove(enemyKing) !== null) return [0];
-
-    const pieces = document.querySelectorAll(`.square[data-piece^="${item.color}"`);
+    const pieces = document.querySelectorAll(`.square[data-piece^="${item.color}"]`);
     const checks = [];
     pieces.forEach ((piece) => {
-        let move = check(piece);
+        let move = possibleMove(piece);
+        
         if(move.at(-1) === "1") {
-            move.splice(-1,2);
+            console.log(move);
+            move.splice(-1,1);
+            console.log(move);
             checks.push(move);
+            CheckCase.node.push(piece);
         }
     })
 
-    if (checks.length > 1) {
+    if(checks.length === 1) {
+        CheckCase.possibleMoves = [];
+        CheckCase.possibleMoves.push(...checks[0]);
+        console.log(CheckCase.possibleMoves)
+        return CheckCase.possibleMoves;
+    }
+    
+    if (checks.length > 1 && CheckCase.kingMoves.length === 0) {
         if(item.color === "W") {
             victoryWhite();
             return null;
@@ -137,13 +215,8 @@ function isCheckmated(item) {
             return null;
         }
     }
-
-    const oppPieces = document.querySelectorAll(`.square[data-piece^="${item.oppColor}"`);
-    oppPieces.forEach ((piece) => {
-        let move = check(piece);
-        const commonElements = move.filter(value => checks[0].includes(value));
-        return commonElements;
-    })
+    
+    return checks[0];
 }
 
 function pinImplementation(dict, item, currentFEN) {
@@ -213,6 +286,21 @@ function pinImplementation(dict, item, currentFEN) {
         return;
     }
 }
+
+function inCheck(item) {
+    const oppPieces = document.querySelectorAll(`.square[data-piece^="${item.color}"]`);
+    for(let move of oppPieces) {
+        item = check(move);
+        
+        if (item.at(-1) == 1) {
+            console.log(item, move)
+            CheckCase.checked = true;
+            CheckCase.testing = true;
+            break;
+        }
+    }
+}
+
 function victoryBlack() {
     console.log("YEs");
     div = document.querySelector(".container-VB");
