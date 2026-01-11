@@ -14,16 +14,16 @@ function Pieces(item, currentFEN) {
 
         case "WP":
             if (item.row > 0) {
-                
+                let a = 1;
                 if (item.row <= 7 && item.row > 0) {
                     let one = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${item.col}"]`);
                     const pieceAtSquare = one.getAttribute("data-piece");
                     if (!pieceAtSquare) {
                         one.classList.add('highlighted');
-                    }
+                    } else a = 0;
                 }
 
-                if (item.row === 7) {
+                if (item.row === 7 && a === 1) {
                     let two = document.querySelector(`.square[data-row="${item.row - 2}"][data-col="${item.col}"]`);
                     if (two) {
                         const pieceAtSquare1 = two.getAttribute("data-piece");
@@ -73,16 +73,16 @@ function Pieces(item, currentFEN) {
         
         case "BP":
             if (item.row > 0) {
-            
+                let a = 1;
                 if (item.row <= 7 && item.row > 0) {
                     let one = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${item.col}"]`);
                     const pieceAtSquare = one.getAttribute("data-piece");
                     if (!pieceAtSquare) {
                         one.classList.add('highlighted');
-                    }
+                    } else a = 0;
                 }
 
-                if (item.row === 2) {
+                if (item.row === 2 && a === 1) {
                     let two = document.querySelector(`.square[data-row="${item.row + 2}"][data-col="${item.col}"]`);
                     const pieceAtSquare1 = two.getAttribute("data-piece");
                     if (!pieceAtSquare1) {

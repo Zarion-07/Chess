@@ -257,7 +257,36 @@ function kingMove(piece) {
         });
         }
     })
-    kingPlace(kingMoves, piece);
+
+    if(kingMoves) {
+        console.log(kingMoves);
+        kingMoves.forEach(element => {
+            const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
+            const data = node.getAttribute("data-piece");
+
+            if(data[0] === piece.oppColor) {
+                node.classList.add('enemy');
+            }
+
+            else if (element === "83" || element === "13"){
+                if(kingMoves.includes("84") || kingMoves.includes("14")) {
+                    node.classList.add('enemy');
+                }
+            }
+
+            else if (element === "87" || element === "17"){
+                if(kingMoves.includes("86") || kingMoves.includes("16")) {
+                    node.classList.add('enemy');
+                }
+            }
+
+            else {
+                node.classList.add('highlighted');
+            }
+        })
+    }
+    
+    piece.node.classList.add('highlightPiece');
     
 }
 
@@ -360,40 +389,8 @@ function kingMoveCheck(piece) {
         });
         }
     })
+    console.log(kingMoves);
     return kingMoves;
-}
-
-function kingPlace(kingMoves, piece) {
-    if(kingMoves) {
-        console.log(kingMoves);
-        kingMoves.forEach(element => {
-            const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
-            const data = node.getAttribute("data-piece");
-
-            if(data[0] === piece.oppColor) {
-                node.classList.add('enemy');
-            }
-
-            else if (element === "83" || element === "13"){
-                if(kingMoves.includes("84") || kingMoves.includes("14")) {
-                    node.classList.add('enemy');
-                }
-            }
-
-            else if (element === "87" || element === "17"){
-                if(kingMoves.includes("86") || kingMoves.includes("16")) {
-                    node.classList.add('enemy');
-                }
-            }
-
-            else {
-                node.classList.add('highlighted');
-            }
-        })
-    }
-    
-    piece.node.classList.add('highlightPiece');
-    
 }
 
 function possibleMove(piece) {
@@ -498,14 +495,12 @@ function possibleMove(piece) {
 
                 const target_row = item.row + rowDir;
                 const target_col = item.col + colDir;
-                let element = `${target_row}${target_col}`
                 if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) return;
 
                 const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);
                 if (!targetNode) return;
                 if(kingDanger(targetNode, piece) === 1) {
                     inCheck = 1;
-                    moves.push(element);
                     if(inCheck === 1) moves.push("1");
                     return moves;
                 }

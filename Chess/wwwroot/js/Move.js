@@ -19,7 +19,6 @@ function Move(square, currentFEN) {
         shooter.setAttribute("data-piece", "");
         shooter.innerHTML = "";
 
-        
         if (origin.pieceType === "P") {
 
             const enPassant_Move = currentFEN.split(" ")[3];

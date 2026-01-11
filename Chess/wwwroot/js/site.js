@@ -181,6 +181,8 @@ function play(piece) {
 function isCheckmated(item) {
     const enemyKing = new Piece(document.querySelector(`.square[data-piece="${item.oppColor}K"]`));
     const kingMoves = kingMoveCheck(enemyKing);
+    CheckCase.kingMoves = [];
+    console.log(kingMoves)
     if(kingMoves.length > 0) {
         CheckCase.kingMoves.push(...kingMoves);
     }
@@ -205,8 +207,11 @@ function isCheckmated(item) {
         console.log(CheckCase.possibleMoves)
         return CheckCase.possibleMoves;
     }
-    
+    console.log(CheckCase.kingMoves)
+    console.log(checks)
     if (checks.length > 1 && CheckCase.kingMoves.length === 0) {
+        console.log(CheckCase.kingMoves.length === 0)
+        console.log(checks.length > 1)
         if(item.color === "W") {
             victoryWhite();
             return null;
@@ -214,6 +219,8 @@ function isCheckmated(item) {
             victoryBlack();
             return null;
         }
+    } else if(checks.length > 1 && CheckCase.kingMoves.length !== 0) {
+        return CheckCase.kingMoves;
     }
     
     return checks[0];
