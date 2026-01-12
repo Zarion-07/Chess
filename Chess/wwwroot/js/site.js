@@ -162,6 +162,7 @@ function play(piece) {
             console.log(CheckCase);
 
             if (newFEN) {
+                console.log(newFEN)
                 currentFEN = newFEN;
             }
         }

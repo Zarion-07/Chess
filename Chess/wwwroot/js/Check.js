@@ -160,7 +160,8 @@ function isPinned(piece) {
 
 function kingMove(piece) {
     if (!piece) return;
-
+    const parts = currentFEN.split(" ");
+    let castling = parts[2].split("");
     const kingMoves = [];
     const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
 
@@ -269,14 +270,26 @@ function kingMove(piece) {
             }
 
             else if (element === "83" || element === "13"){
-                if(kingMoves.includes("84") || kingMoves.includes("14")) {
+                if(kingMoves.includes("84") && castling.includes("Q")) {
                     node.classList.add('enemy');
+                }
+
+                else if(kingMoves.includes("14") && castling.includes("q")) {
+                    node.classList.add('enemy');
+                } else {
+                    node.classList.add('highlighted');
                 }
             }
 
             else if (element === "87" || element === "17"){
-                if(kingMoves.includes("86") || kingMoves.includes("16")) {
+                if(kingMoves.includes("86") && castling.includes("K")) {
                     node.classList.add('enemy');
+                }
+
+                else if(kingMoves.includes("16") && castling.includes("k")) {
+                    node.classList.add('enemy');
+                } else {
+                    node.classList.add('highlighted');
                 }
             }
 

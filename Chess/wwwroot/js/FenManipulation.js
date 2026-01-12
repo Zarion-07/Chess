@@ -242,6 +242,7 @@ function castlingFEN(origin, rook, currentFEN) {
         
         parts[0] = newBoard;
         currentFEN = parts.join(" ");
+        console.log(currentFEN)
         return currentFEN;
     }
     else if (origin.color === "B" && rook.col === 4) {

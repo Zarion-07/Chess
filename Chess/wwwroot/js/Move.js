@@ -37,7 +37,7 @@ function Move(square, currentFEN) {
             
         }
 
-        const parts = currentFEN.split(" ");
+        let parts = currentFEN.split(" ");
         let castling = parts[2].split("");
         if (origin.pieceType === "R" && (castling[0] === "K" || castling[3] === "q") && origin.col === 8) {
             if (origin.color === "W") {
@@ -60,7 +60,8 @@ function Move(square, currentFEN) {
         }
 
         if (origin.pieceName === "WK" && (castling[0] === "K" || castling[1] === "Q")) {
-            
+            castling.splice(0, 1, "-");
+            castling.splice(1, 1, "-");
             const Qnode = document.querySelector(`.enemy[data-row="8"][data-col="3"]`);
             const Knode = document.querySelector(`.enemy[data-row="8"][data-col="7"]`);
 
@@ -76,10 +77,12 @@ function Move(square, currentFEN) {
 
                 var Rook = new Piece(newRook);
                 castleFEN = castlingFEN(origin, Rook, currentFEN);
+                console.log(castleFEN);
                 const castlePart = castleFEN.split(" ");
                 castling.splice(0, 1, "-");
                 castling.splice(1, 1, "-");
                 castlePart[2] = castling.join("");
+                parts = castlePart;
                 currentFEN = castlePart.join(" ");
                 special = 1;
             }
@@ -101,14 +104,18 @@ function Move(square, currentFEN) {
                 castling.splice(1, 1,"-");
                 
                 castlePart[2] = castling.join("");
+                parts = castlePart;
                 currentFEN = castlePart.join(" ");
                 special = 1;
             }
-            
+            parts[1] = "b";
+            parts[2] = castling.join("");
+            currentFEN = parts.join(" ");
         }
 
         else if (origin.pieceName === "BK" && (castling[2] === "k" || castling[3] === "q")) {
-            
+            castling.splice(2, 1, "-");
+            castling.splice(3, 1, "-");
             const Knode = document.querySelector(`.enemy[data-row="1"][data-col="7"]`);
             const Qnode = document.querySelector(`.enemy[data-row="1"][data-col="3"]`);
             if (Qnode && square.col === 3) {
@@ -128,7 +135,7 @@ function Move(square, currentFEN) {
                 castling.splice(2, 1, "-");
                 castling.splice(3, 1, "-");
                 castlePart[2] = castling.join("");
-                currentFEN = castlePart.join(" ");
+                parts = castlePart;
                 special = 1;
             }
 
@@ -148,9 +155,13 @@ function Move(square, currentFEN) {
                 castling.splice(2, 1, "-");
                 castling.splice(3, 1, "-");
                 castlePart[2] = castling.join("");
-                currentFEN = castlePart.join(" ");
+                parts = castlePart;
+                console.log(currentFEN)
                 special = 1;
             }
+            parts[1] = "w";
+            parts[2] = castling.join("");
+            currentFEN = parts.join(" ");
         }
 
         square.node.innerHTML = `<img src="/Images/${origin.pieceName}.png" alt="${origin.pieceName}" />`;
