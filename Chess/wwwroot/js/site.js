@@ -153,12 +153,12 @@ function play(piece) {
         else {
             const newFEN = Move(item, currentFEN);
             moveMade = true;
-            if(CheckCase.testing === true) CheckCase.testing = false;
+            CheckCase.testing = false;
             const destinationSquare = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
             const movedPiece = new Piece(destinationSquare);
     
-            console.log(movedPiece); // This should now have the correct piece data
-            inCheck(movedPiece);     // Pass the new piece object
+            console.log(movedPiece); 
+            inCheck(movedPiece);     
             console.log(CheckCase);
 
             if (newFEN) {

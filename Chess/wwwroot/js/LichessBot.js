@@ -134,11 +134,16 @@ function playBot(piece) {
                             const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                             const data = node.getAttribute("data-piece");
                             console.log(element);
-                            if(data && data[0] === item.oppColor) {
+                            if(data[0] === item.oppColor) {
                                 node.classList.add('enemy');
-                            } else {
-                                node.classList.add('highlighted');
+                                CheckCase.checked = false;
                             }
+                        
+                            else{
+                                node.classList.add('highlighted');
+                                CheckCase.checked = false;
+                            }
+
                         })
                     }
                 } else {
@@ -167,6 +172,7 @@ function playBot(piece) {
             
             if(item.pieceType === "K") {
                 kingMove(item);
+
                 return;
             } else {
                 
@@ -192,11 +198,16 @@ function playBot(piece) {
                                 const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                                 const data = node.getAttribute("data-piece");
                                 console.log(element);
-                                if(data && data[0] === item.oppColor) {
+                                if(data[0] === item.oppColor) {
                                     node.classList.add('enemy');
-                                } else {
-                                    node.classList.add('highlighted');
+                                    CheckCase.checked = false;
                                 }
+                            
+                                else{
+                                    node.classList.add('highlighted');
+                                    CheckCase.checked = false;
+                                }
+
                             })
                         }
                     } else {
@@ -207,8 +218,8 @@ function playBot(piece) {
         } 
 
         else if(item.node === compare.node) {
-            document.querySelectorAll(".highlighted, .enemy, .highlightPiece")
-                .forEach(sq => sq.classList.remove("highlighted", "enemy", "highlightPiece"));
+            document.querySelectorAll(".highlighted, .enemy")
+                .forEach(sq => sq.classList.remove("highlighted", "enemy"));
             return;
         }
         

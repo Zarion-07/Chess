@@ -422,7 +422,7 @@ function pinCheck(piece) {
 
                 const pieceAtSquare = targetNode.getAttribute("data-piece");
 
-                if (!pieceAtSquare || pieceAtSquare[0] === item.color) {
+                if (!pieceAtSquare || pieceAtSquare[0] === item.oppColor) {
                     let element = `${target_row}${target_col}`;
                     moves.push(element);
                 }

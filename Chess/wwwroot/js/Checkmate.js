@@ -23,7 +23,19 @@ function isCheckmated(item) {
 
     if(checks.length === 1) {
         CheckCase.possibleMoves = [];
+        checkmate(item);
+        console.log(checks[0])
         CheckCase.possibleMoves.push(...checks[0]);
+        const statusCheck = checkmate(item);
+        if(statusCheck && CheckCase.kingMoves.length === 0) {
+            if(item.color === "W") {
+                victoryWhite();
+                return null;
+            } else {
+                victoryBlack();
+                return null;
+            }
+        }
         console.log(CheckCase.possibleMoves)
         return CheckCase.possibleMoves;
     }
@@ -42,8 +54,23 @@ function isCheckmated(item) {
     } else if(checks.length > 1 && CheckCase.kingMoves.length !== 0) {
         return CheckCase.kingMoves;
     }
-    
     return checks[0];
+}
+
+function checkmate(item) {
+    pieces = document.querySelectorAll(`.square[data-piece^="${item.oppColor}"]`);
+    let islost = true;
+    for(const piece of pieces) {
+        const name = new Piece(piece);
+        move = pinCheck(piece);
+        if(move.some(element => CheckCase.possibleMoves.includes(element)) && name.pieceType !== "K") {
+            console.log(move, piece);
+            islost = false;
+            break;
+        }
+    }
+    console.log(islost);
+    return islost;
 }
 
 function pinImplementation(dict, item, currentFEN) {
