@@ -1,36 +1,79 @@
-﻿let currentFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-
-class Piece {
-
-    constructor (piece) {
-        this.node = piece;
-        this.pieceName = piece.getAttribute("data-piece");
-        this.row = parseInt(piece.getAttribute("data-row"));
-        this.col = parseInt(piece.getAttribute("data-col"));
-        this.color = this.pieceName ? this.pieceName[0] : null;
-        this.pieceType = this.pieceName ? this.pieceName[1] : null;
-        this.oppColor = this.color === "W" ? "B" : "W";
+class LichessEngine {
+    constructor() {
+        this.baseUrl = 'https://lichess.org/api/cloud-eval';
+    }
+    
+    async getBestMove(fen, callback, multiPv = 1) {
+        try {
+            const url = `https://lichess.org/api/cloud-eval?fen=${encodeURIComponent(fen)}&multiPv=1`;
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            if (data.pvs && data.pvs.length > 0) {
+                const bestMove = data.pvs[0].moves.split(' ')[0];
+                callback(bestMove);
+            } else {
+                console.error('No moves found in response');
+            }
+        } catch (error) {
+            console.error('Error getting move from Lichess:', error);
+        }
     }
 }
 
-let CheckCase = {
-    node : [],
-    checked : false,
-    possibleMoves : [], 
-    kingMoves : [],
-    checkmated : false,
-    testing : false,
-    
+const engine = new LichessEngine();
+
+function makeBotMove() {
+    engine.getBestMove(currentFEN, (move) => {
+        console.log('Lichess suggests:', move);
+        executeMove(move);
+    });
 }
 
-function play(piece) {
+function executeMove(uciMove) {
+    const fromFile = uciMove[0].charCodeAt(0) - 96; 
+    const fromRank = 9 - parseInt(uciMove[1]); 
+    const toFile = uciMove[2].charCodeAt(0) - 96;
+    const toRank = 9 - parseInt(uciMove[3]);
+    
+    const fromSquare = document.querySelector(
+        `.square[data-row="${fromRank}"][data-col="${fromFile}"]`
+    );
+    const toSquare = document.querySelector(
+        `.square[data-row="${toRank}"][data-col="${toFile}"]`
+    );
+    
+    if (fromSquare && toSquare) {
+        playBot(fromSquare);
+        setTimeout(() => playBot(toSquare), 150);
+    }
+}
+
+function triggerBotIfNeeded() {
+    const currentPlayer = currentFEN.split(" ")[1];
+    
+    if (currentPlayer === 'b' && !CheckCase.checkmated) {
+        setTimeout(() => {
+            makeBotMove();
+        }, 500);
+    }
+}
+
+const player = "W";
+
+function playBot(piece) {
     const item = new Piece(piece);
     const highlighted = document.querySelectorAll(".highlighted, .enemy, .highlightPiece");
     to_Play = currentFEN.split(" ")[1].toUpperCase();
     let moveMade = false;
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
-        console.log(item);
+        
         if (!item.pieceName) return;
         
         if(item.pieceType === "K" && item.color === to_Play) {
@@ -38,10 +81,10 @@ function play(piece) {
             return;
         } else {
             const dict = isPinned(item);
-            console.log(dict);
+            
             if(dict && dict.size == 1) {
                 pinImplementation(dict, item, currentFEN);
-                console.log(dict);
+                
             } 
             
             else if(dict && dict.size >= 2) {
@@ -49,28 +92,21 @@ function play(piece) {
             }
 
             else {
-                console.log(dict);
                 if(CheckCase.testing === true) {
                     moves = pinCheck(piece);
-                    console.log(CheckCase.possibleMoves);
                     const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                    console.log(moves);
+                    
                     if(commonElements.length > 0) {
                         item.node.classList.add('highlightPiece');
                         commonElements.forEach(element => {
                             const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                             const data = node.getAttribute("data-piece");
                             console.log(element);
-                            if(data[0] === item.oppColor) {
+                            if(data && data[0] === item.oppColor) {
                                 node.classList.add('enemy');
-                                CheckCase.checked = false;
-                            }
-                        
-                            else{
+                            } else {
                                 node.classList.add('highlighted');
-                                CheckCase.checked = false;
                             }
-
                         })
                     }
                 } else {
@@ -99,7 +135,6 @@ function play(piece) {
             
             if(item.pieceType === "K") {
                 kingMove(item);
-
                 return;
             } else {
                 
@@ -118,23 +153,18 @@ function play(piece) {
                         moves = pinCheck(piece);
                         console.log(CheckCase.possibleMoves);
                         const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                        console.log(moves);
+                        
                         if(commonElements.length > 0) {
                             item.node.classList.add('highlightPiece');
                             commonElements.forEach(element => {
                                 const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                                 const data = node.getAttribute("data-piece");
-                                console.log(element);
-                                if(data[0] === item.oppColor) {
+                                
+                                if(data && data[0] === item.oppColor) {
                                     node.classList.add('enemy');
-                                    CheckCase.checked = false;
-                                }
-                            
-                                else{
+                                } else {
                                     node.classList.add('highlighted');
-                                    CheckCase.checked = false;
                                 }
-
                             })
                         }
                     } else {
@@ -145,35 +175,45 @@ function play(piece) {
         } 
 
         else if(item.node === compare.node) {
-            document.querySelectorAll(".highlighted, .enemy")
-                .forEach(sq => sq.classList.remove("highlighted", "enemy"));
+            document.querySelectorAll(".highlighted, .enemy, .highlightPiece")
+                .forEach(sq => sq.classList.remove("highlighted", "enemy", "highlightPiece"));
             return;
         }
-       
+        
+        // THIS IS THE ACTUAL MOVE EXECUTION BLOCK (was missing!)
         else {
             const newFEN = Move(item, currentFEN);
             moveMade = true;
+            
+            // Reset check state
             if(CheckCase.testing === true) CheckCase.testing = false;
-            const destinationSquare = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
+            CheckCase.checked = false;
+            CheckCase.possibleMoves = [];
+            CheckCase.kingMoves = [];
+            CheckCase.node = [];
+            
+            const destinationSquare = document.querySelector(
+                `.square[data-row="${item.row}"][data-col="${item.col}"]`
+            );
             const movedPiece = new Piece(destinationSquare);
-    
-            console.log(movedPiece); // This should now have the correct piece data
-            inCheck(movedPiece);     // Pass the new piece object
-            console.log(CheckCase);
 
+            console.log(movedPiece);
+            inCheck(movedPiece);
+            
             if (newFEN) {
                 currentFEN = newFEN;
+                
+                // Check for checkmate after move
+                if(CheckCase.checked === true) {
+                    const possibleMoves = isCheckmated(movedPiece);
+                    console.log(possibleMoves);
+                    if(possibleMoves) CheckCase.checkmated = false;
+                    else CheckCase.checkmated = true;
+                }
+                
+                // TRIGGER BOT HERE
+                triggerBotIfNeeded();
             }
         }
-    }
-
-    if(CheckCase.checked === true && moveMade) {
-        const destinationSquare = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
-        const movedPiece = new Piece(destinationSquare);
-        const possibleMoves = isCheckmated(movedPiece);
-
-        console.log(possibleMoves);
-        if(possibleMoves) CheckCase.checkmated = false;
-        else CheckCase.checkmated = true;
     }
 }

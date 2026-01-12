@@ -1,5 +1,5 @@
-﻿@{
-    ViewData["Title"] = "OffChess";
+@{
+    ViewData["Title"] = "Chess";
 }
 
 <head>
@@ -9,6 +9,7 @@
     <script src="~/js/site.js"></script>
     <script src="~/js/Check.js"></script>
     <script src="~/js/Checkmate.js"></script>
+    <script src="~/js/LichessBot.js"></script>
     <script src="~/js/CheckImplement.js"></script>
     <script src="~/js/FenManipulation.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,7 +47,7 @@
                         string? squareColor = (row + col) % 2 == 0 ? "light" : "dark";
                         string? piece = initialBoard[row - 1, col - 1];
                         
-                        <td class="square @squareColor clickable-element hover" data-piece="@piece" data-row="@row" data-col="@col" onclick="play(this)">
+                        <td class="square @squareColor clickable-element hover" data-piece="@piece" data-row="@row" data-col="@col" onclick="playBot(this)">
                             @if (!string.IsNullOrEmpty(piece))
                             {
                                 <img src="~/Images/@(piece).png" alt="@piece" />
@@ -98,8 +99,5 @@
             </table>
         </div>
     </div>
-    <a asp-controller="Home" asp-action="Home">
-        <button>Home</button>
-    </a>
-
+    
 </body>

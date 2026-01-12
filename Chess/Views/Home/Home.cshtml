@@ -1,9 +1,14 @@
+@{
+    ViewData["Title"] = "Home";
+    ViewData["BodyClass"] = "dark-home";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="~/css/Home.css" />
     <style>
         button {
             color: white;
@@ -17,29 +22,27 @@
 
 </head>
 <body>
-    <h1>Chess</h1>
+    <div class="home-container">
+        <div id="Bot1">
+            <button type="button" onclick="ChooseColor()">Play Bot</button>
+        </div>
 
-    <form asp-controller="Home" asp-action="Index" method="get">
-        <button type="submit" id="createRoom">Create Room</button>
-    </form>
+        <div id="ChooseColor">
+            <h2>Choose a color</h2>
+            <form asp-controller="Home" asp-action="LichessBot" method="get">
+                <button>Black</button>
+                <button>White</button>
+            </form>
+        </div>
 
+    </div>
+
+    @section Scripts {
     <script>
-        document.getElementById("createRoom").onclick = function () {
-
-            const socket = new WebSocket("ws://localhost:8081");
-
-            socket.onopen = () => {
-            console.log("Browser connected");
-            socket.send("PING");
-            };
-
-
-            socket.onmessage = (event) => {
-                console.log("Server says:", event.data);
-            };
-
-            socket.onclose = () => console.log("Connection closed");
-        };
-    </script>
+        function ChooseColor() {
+            document.getElementById("Bot1").style.display = "none";
+            document.getElementById("ChooseColor").style.display = "flex";
+        }
+    </script>}
 </body>
 </html>

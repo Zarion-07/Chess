@@ -1,8 +1,6 @@
 ﻿function ManipulateFen(origin, dest, currentFEN) {
     const parts = currentFEN.split(" ");
     const board = parts[0].split("/");
-    
-    console.log(currentFEN);
 
     const expandRow = (rowStr) => {
         let arr = [];
@@ -82,7 +80,6 @@
 }
 
 function whitePromotion() {
-    console.log("YE");
     element = document.querySelector("#White_Promotion");
     div = document.querySelector(".container-WP");
     div.classList.add("overlay");
@@ -91,7 +88,6 @@ function whitePromotion() {
 }
 
 function blackPromotion() {
-    console.log("YE");
     element = document.querySelector("#Black_Promotion");
     div = document.querySelector(".container-BP");
     div.classList.add("overlay");
@@ -99,7 +95,6 @@ function blackPromotion() {
 }
 
 function changeImage(node) {
-    console.log("reached");
     const piece = node.dataset.piece;
     const parts = currentFEN.split(" ");
     const board = parts[0].split("/");
@@ -146,8 +141,6 @@ function changeImage(node) {
                 board[0] = collapseRow(row);
                 div = document.querySelector(".container-WP");
                 div.classList.remove("overlay");
-                console.log(board);
-                console.log(row);
                 break;
             }
         }
@@ -165,11 +158,7 @@ function changeImage(node) {
                 r = 8;
                 board[7] = collapseRow(row);
                 div = document.querySelector(".container-BP");
-                console.log(div);
                 div.classList.remove("overlay");
-                console.log(board);
-                console.log(row);
-                console.log(j);
                 break;
             }
         }
@@ -187,15 +176,11 @@ function changeImage(node) {
     
     parts[0] = newBoard;
     currentFEN = parts.join(" ");
-    
-    console.log(square);
 }
 
 function castlingFEN(origin, rook, currentFEN) {
     const parts = currentFEN.split(" ");
     const board = parts[0].split("/");
-    
-    console.log(origin);
 
     const expandRow = (rowStr) => {
         let arr = [];
@@ -250,7 +235,7 @@ function castlingFEN(origin, rook, currentFEN) {
         updateRow[6] = "K";
         updateRow[5] = "R";
         board[7] = collapseRow(updateRow);
-        console.log(board);
+        
         parts[0] = board.join("/");
         parts[1] = (origin.color === "W") ? "b" : "w";
         const newBoard = board.join("/");
@@ -291,8 +276,4 @@ function castlingFEN(origin, rook, currentFEN) {
     }
 
     return null;
-}
-
-function White_Castle() {
-
 }

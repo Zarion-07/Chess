@@ -159,7 +159,7 @@ function isPinned(piece) {
 }
 
 function kingMove(piece) {
-    if (!piece) return console.log("empty");
+    if (!piece) return;
 
     const kingMoves = [];
     const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
@@ -240,9 +240,9 @@ function kingMove(piece) {
         const num2 = pair[1];
         traversingNode_King(num1, num2);
     });
-    console.log(piece);
+    
     const oppPieces = document.querySelectorAll(`.square[data-piece^="${piece.oppColor}"]`);
-    console.log(oppPieces);
+    
     oppPieces.forEach(oppPiece => {
         const array = check(oppPiece);
         
@@ -372,9 +372,9 @@ function kingMoveCheck(piece) {
         const num2 = pair[1];
         traversingNode_King(num1, num2);
     });
-    console.log(piece);
+    
     const oppPieces = document.querySelectorAll(`.square[data-piece^="${piece.oppColor}"]`);
-    console.log(oppPieces);
+    
     oppPieces.forEach(oppPiece => {
         const array = check(oppPiece);
         
@@ -389,7 +389,7 @@ function kingMoveCheck(piece) {
         });
         }
     })
-    console.log(kingMoves);
+    
     return kingMoves;
 }
 
@@ -620,7 +620,7 @@ function possibleMove(piece) {
         case "BK":
 
         case "WK":
-            console.log(item.pieceName);
+            
             const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
             const traversingNode_King = (rowDir, colDir) => {
 
