@@ -1,70 +1,100 @@
-class LichessEngine {
+class StockfishBot {
     constructor() {
-        this.baseUrl = 'https://lichess.org/api/cloud-eval';
+        this.engine = new Worker('/js/stockfish.js');
+        this.engineReady = false;
+        this.onMoveCallback = null;
+
+        this.engine.onmessage = (event) => {
+            const line = event.data;
+            console.log('Stockfish:', line);
+
+            // Engine finished initializing
+            if (line === 'readyok') {
+                this.engineReady = true;
+                console.log('Stockfish READY');
+            }
+
+            // Best move output
+            if (line.startsWith('bestmove')) {
+                const match = line.match(/bestmove\s([a-h][1-8][a-h][1-8])/);
+                if (match && this.onMoveCallback) {
+                    this.onMoveCallback(match[1]);
+                }
+            }
+        };
+
+        // Proper initialization sequence
+        this.engine.postMessage('uci');
+        this.engine.postMessage('isready');
     }
-    
-    async getBestMove(fen, callback, multiPv = 1) {
-        try {
-            const url = `https://lichess.org/api/cloud-eval?fen=${encodeURIComponent(fen)}&multiPv=1`;
-            const response = await fetch(url);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-            
-            if (data.pvs && data.pvs.length > 0) {
-                const bestMove = data.pvs[0].moves.split(' ')[0];
-                callback(bestMove);
-            } else {
-                console.error('No moves found in response');
-            }
-        } catch (error) {
-            console.error('Error getting move from Lichess:', error);
+
+    getBestMove(fen, callback, depth = 10) {
+        if (!this.engineReady) {
+            console.warn('Engine not ready yet, skipping');
+            return;
         }
+
+        this.onMoveCallback = callback;
+
+        this.engine.postMessage(`position fen ${fen}`);
+        this.engine.postMessage(`go depth ${depth}`);
+    }
+    // Stop the engine
+    stop() {
+        this.engine.postMessage('stop');
+    }
+    
+    // Terminate the engine
+    quit() {
+        this.engine.postMessage('quit');
+        this.engine.terminate();
     }
 }
 
-const engine = new LichessEngine();
+let bot = new StockfishBot();
 
+// Function to make bot move
 function makeBotMove() {
-    engine.getBestMove(currentFEN, (move) => {
-        console.log('Lichess suggests:', move);
-        executeMove(move);
-    });
+    bot.getBestMove(currentFEN, (move) => {
+        console.log('Bot wants to play:', move);
+        
+        // Parse the move (e.g., "e2e4")
+        const fromCol = move[0].charCodeAt(0) - 96; // a=1, b=2, etc.
+        const fromRow = 9 - parseInt(move[1]); // Convert to your board's row system
+        const toCol = move[2].charCodeAt(0) - 96;
+        const toRow = 9 - parseInt(move[3]);
+        
+        // Execute the move on your board
+        const fromSquare = document.querySelector(
+            `.square[data-row="${fromRow}"][data-col="${fromCol}"]`
+        );
+        const toSquare = document.querySelector(
+            `.square[data-row="${toRow}"][data-col="${toCol}"]`
+        );
+        
+        if (fromSquare && toSquare) {
+            // First click to select piece
+            play(fromSquare);
+            
+            // Second click to move
+            setTimeout(() => {
+                play(toSquare);
+            }, 100);
+        }
+    }, 10); // depth 10 - adjust for difficulty
 }
 
-function executeMove(uciMove) {
-    const fromFile = uciMove[0].charCodeAt(0) - 96; 
-    const fromRank = 9 - parseInt(uciMove[1]); 
-    const toFile = uciMove[2].charCodeAt(0) - 96;
-    const toRank = 9 - parseInt(uciMove[3]);
-    
-    const fromSquare = document.querySelector(
-        `.square[data-row="${fromRank}"][data-col="${fromFile}"]`
-    );
-    const toSquare = document.querySelector(
-        `.square[data-row="${toRank}"][data-col="${toFile}"]`
-    );
-    
-    if (fromSquare && toSquare) {
-        playBot(fromSquare);
-        setTimeout(() => playBot(toSquare), 150);
-    }
-}
-
-function triggerBotIfNeeded() {
+// Call this after player makes a move
+function afterPlayerMove() {
     const currentPlayer = currentFEN.split(" ")[1];
     
-    if (currentPlayer === 'b' && !CheckCase.checkmated) {
+    // If it's black's turn, make bot move
+    if (currentPlayer === 'b') {
         setTimeout(() => {
             makeBotMove();
-        }, 500);
+        }, 500); // Small delay for better UX
     }
 }
-
-const player = "W";
 
 function playBot(piece) {
     const item = new Piece(piece);
@@ -73,7 +103,7 @@ function playBot(piece) {
     let moveMade = false;
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
-        
+        console.log(item);
         if (!item.pieceName) return;
         
         if(item.pieceType === "K" && item.color === to_Play) {
@@ -81,10 +111,10 @@ function playBot(piece) {
             return;
         } else {
             const dict = isPinned(item);
-            
+            console.log(dict);
             if(dict && dict.size == 1) {
                 pinImplementation(dict, item, currentFEN);
-                
+                console.log(dict);
             } 
             
             else if(dict && dict.size >= 2) {
@@ -92,10 +122,12 @@ function playBot(piece) {
             }
 
             else {
+                console.log(dict);
                 if(CheckCase.testing === true) {
                     moves = pinCheck(piece);
+                    console.log(CheckCase.possibleMoves);
                     const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                    
+                    console.log(moves);
                     if(commonElements.length > 0) {
                         item.node.classList.add('highlightPiece');
                         commonElements.forEach(element => {
@@ -153,13 +185,13 @@ function playBot(piece) {
                         moves = pinCheck(piece);
                         console.log(CheckCase.possibleMoves);
                         const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                        
+                        console.log(moves);
                         if(commonElements.length > 0) {
                             item.node.classList.add('highlightPiece');
                             commonElements.forEach(element => {
                                 const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                                 const data = node.getAttribute("data-piece");
-                                
+                                console.log(element);
                                 if(data && data[0] === item.oppColor) {
                                     node.classList.add('enemy');
                                 } else {
@@ -199,6 +231,7 @@ function playBot(piece) {
 
             console.log(movedPiece);
             inCheck(movedPiece);
+            console.log(CheckCase);
             
             if (newFEN) {
                 currentFEN = newFEN;
@@ -215,5 +248,16 @@ function playBot(piece) {
                 triggerBotIfNeeded();
             }
         }
+    }
+}
+
+function triggerBotIfNeeded() {
+    const currentPlayer = currentFEN.split(" ")[1];
+    
+    // If black to move and bot plays black
+    if (currentPlayer === 'b' && !CheckCase.checkmated) {
+        setTimeout(() => {
+            makeBotMove();
+        }, 500); // Delay for better UX
     }
 }

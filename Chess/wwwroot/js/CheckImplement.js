@@ -2,7 +2,7 @@ function check(piece) {
     const item = new Piece(piece);
     let moves = [];
     let inCheck = 0;
-    console.log(inCheck);
+    
     switch (item.pieceName) {
         case "WP":
             if (item.row > 0) {
@@ -67,8 +67,7 @@ function check(piece) {
                     if (!targetNode) break;
                 
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
-                    console.log(pieceAtSquare);
-
+                 
                     if (pieceAtSquare[0] === item.color) {
                         let element = `${target_row}${target_col}`;
                         moves.push(element);
@@ -237,7 +236,6 @@ function check(piece) {
         case "BK":
 
         case "WK":
-            console.log(item.pieceName);
             const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
             const traversingNode_King = (rowDir, colDir) => {
 
@@ -404,7 +402,7 @@ function pinCheck(piece) {
                     }
                 }
             }
-            console.log(moves);
+            
             return moves;
 
         case "WN":

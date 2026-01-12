@@ -259,7 +259,7 @@ function kingMove(piece) {
     })
 
     if(kingMoves) {
-        console.log(kingMoves);
+        
         kingMoves.forEach(element => {
             const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
             const data = node.getAttribute("data-piece");
@@ -291,7 +291,7 @@ function kingMove(piece) {
 }
 
 function kingMoveCheck(piece) {
-    if (!piece) return console.log("empty");
+    if (!piece) return;
 
     const kingMoves = [];
     const iteration = [[0,1], [0,-1], [1,0], [1,1], [1,-1], [-1,0], [-1,-1], [-1,1]];
