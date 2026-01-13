@@ -169,7 +169,7 @@ function changeImage(node) {
 
     const square = document.querySelector(`.square[data-row="${r}"][data-col="${j}"]`);
 
-    square.innerHTML = `<img src="/Images/${piece}.png" alt="${piece}" />`;
+    square.innerHTML = `<img src="/${Player.folder}/${piece}.png" alt="${piece}" />`;
     square.dataset.piece = `${piece}`;
     parts[0] = board.join("/");
     const newBoard = board.join("/");

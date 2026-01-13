@@ -1,4 +1,5 @@
 function Move(square, currentFEN) {
+    console.log(Player);
     let avail = false;
     let special = 0;
     let castleFEN;
@@ -72,7 +73,7 @@ function Move(square, currentFEN) {
                 currentRook.innerHTML = "";
 
                 newRook = document.querySelector(`[data-row="8"][data-col="4"]`);
-                newRook.innerHTML = `<img src="/Images/WR.png" alt="WR" />`;
+                newRook.innerHTML = `<img src="/${Player.folder}/WR.png" alt="WR" />`;
                 newRook.setAttribute("data-piece", "WR");
 
                 var Rook = new Piece(newRook);
@@ -94,7 +95,7 @@ function Move(square, currentFEN) {
                 currentRook.innerHTML = "";
 
                 newRook = document.querySelector(`[data-row="8"][data-col="6"]`);
-                newRook.innerHTML = `<img src="/Images/WR.png" alt="WR" />`;
+                newRook.innerHTML = `<img src="/${Player.folder}/WR.png" alt="WR" />`;
                 newRook.setAttribute("data-piece", "WR");
                 
                 var Rook = new Piece(newRook);
@@ -125,7 +126,7 @@ function Move(square, currentFEN) {
                 currentRook.innerHTML = "";
 
                 const newRook = document.querySelector(`[data-row="1"][data-col="4"]`);
-                newRook.innerHTML = `<img src="/Images/BR.png" alt="BR" />`;
+                newRook.innerHTML = `<img src="/${Player.folder}/BR.png" alt="BR" />`;
                 newRook.setAttribute("data-piece", "BR");
 
                 var Rook = new Piece(newRook);
@@ -146,7 +147,7 @@ function Move(square, currentFEN) {
                 currentRook.innerHTML = "";
 
                 newRook = document.querySelector(`[data-row="1"][data-col="6"]`);
-                newRook.innerHTML = `<img src="/Images/BR.png" alt="BR" />`;
+                newRook.innerHTML = `<img src="/${Player.folder}/BR.png" alt="BR" />`;
                 newRook.setAttribute("data-piece", "BR");
 
                 var Rook = new Piece(newRook);
@@ -164,7 +165,7 @@ function Move(square, currentFEN) {
             currentFEN = parts.join(" ");
         }
 
-        square.node.innerHTML = `<img src="/Images/${origin.pieceName}.png" alt="${origin.pieceName}" />`;
+        square.node.innerHTML = `<img src="/${Player.folder}/${origin.pieceName}.png" alt="${origin.pieceName}" />`;
         square.node.setAttribute("data-piece", origin.pieceName);
 
         document.querySelectorAll(".highlighted, .highlightPiece, .enemy")

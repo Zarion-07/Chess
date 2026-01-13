@@ -53,7 +53,18 @@ class StockfishBot {
 
 let bot = new StockfishBot();
 
-// Function to make bot move
+function changeFolderB() {
+    Player.color = "B";
+    Player.folder = "NewImages"; 
+    console.log(Player);
+}
+
+function changeFolderW() {
+    Player.color = "W";
+    Player.folder = "Images"; 
+    console.log(Player);
+}
+
 function makeBotMove() {
     bot.getBestMove(currentFEN, (move) => {
         console.log('Bot wants to play:', move);
@@ -84,15 +95,13 @@ function makeBotMove() {
     }, 10); // depth 10 - adjust for difficulty
 }
 
-// Call this after player makes a move
 function afterPlayerMove() {
     const currentPlayer = currentFEN.split(" ")[1];
     
-    // If it's black's turn, make bot move
-    if (currentPlayer === 'b') {
+    if (currentPlayer !== Player.color.toLowerCase()) {
         setTimeout(() => {
             makeBotMove();
-        }, 500); // Small delay for better UX
+        }, 300);
     }
 }
 
@@ -228,7 +237,7 @@ function playBot(piece) {
             const newFEN = Move(item, currentFEN);
             moveMade = true;
             
-            // Reset check state
+            
             if(CheckCase.testing === true) CheckCase.testing = false;
             CheckCase.checked = false;
             CheckCase.possibleMoves = [];
@@ -246,7 +255,6 @@ function playBot(piece) {
             
             if (newFEN) {
                 currentFEN = newFEN;
-                
                 // Check for checkmate after move
                 if(CheckCase.checked === true) {
                     const possibleMoves = isCheckmated(movedPiece);
@@ -265,10 +273,81 @@ function playBot(piece) {
 function triggerBotIfNeeded() {
     const currentPlayer = currentFEN.split(" ")[1];
     
-    // If black to move and bot plays black
-    if (currentPlayer === 'b' && !CheckCase.checkmated) {
+    if (currentPlayer !== Player.color.toLowerCase() && !CheckCase.checkmated) {
         setTimeout(() => {
             makeBotMove();
-        }, 500); // Delay for better UX
+        }, 300);
     }
+}
+
+function changeFEN(currentFEN) {
+    let parts = currentFEN.split(" ");
+    let moves = parts[0].split("/");
+    let castle = parts[2];
+
+    moves = reverse(moves);
+
+    let newCastle = "";
+    for (let i = 0; i < castle.length; i++) {
+        let c = castle[i];
+        if (c === c.toLowerCase()) {
+            newCastle += c.toUpperCase();
+        } else {
+            newCastle += c.toLowerCase();
+        }
+    }
+
+    // ✅ normalize order
+    newCastle = normalizeCastle(newCastle);
+
+    parts[0] = moves.join("/");
+    parts[2] = newCastle;
+
+    return parts.join(" ");
+}
+
+function normalizeCastle(castle) {
+    let order = ["K", "Q", "k", "q"];
+    let result = "";
+
+    for (let i = 0; i < order.length; i++) {
+        if (castle.includes(order[i])) {
+            result += order[i];
+        }
+    }
+
+    return result || "-";
+}
+
+function reverse(moves) {
+    moves.forEach((row, rowIndex) => {
+        let array = row.split("");
+
+        array.forEach((piece, colIndex) => {
+            if (piece === piece.toLowerCase() && piece !== piece.toUpperCase()) {
+                piece = piece.toUpperCase();
+            } else if (piece === piece.toUpperCase() && piece !== piece.toLowerCase()) {
+                piece = piece.toLowerCase();
+            }
+            array[colIndex] = piece;
+        });
+
+        array.reverse();
+        moves[rowIndex] = array.join("");
+    });
+
+    return moves.reverse();
+}
+
+function reverseCastle(castle) {
+    let array = castle.split("").reverse();
+
+    array.forEach((c, i) => {
+        if (c === c.toLowerCase() && c !== c.toUpperCase()) {
+            array[i] = c.toUpperCase();
+        } else if (c === c.toUpperCase() && c !== c.toLowerCase()) {
+            array[i] = c.toLowerCase();
+        }
+    });
+    return array.join("");
 }
