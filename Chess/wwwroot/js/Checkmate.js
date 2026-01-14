@@ -160,7 +160,7 @@ function victoryBlack() {
     div = document.querySelector(".container-VB");
     div.classList.add("overlay");
     element = document.querySelector("#victory-B");
-    element.style.display = "block";
+    element.style.display = "flex";
     
 }
 function victoryWhite() {
@@ -168,7 +168,7 @@ function victoryWhite() {
     div = document.querySelector(".container-VW");
     div.classList.add("overlay");
     element = document.querySelector("#victory-W");
-    element.style.display = "block";
+    element.style.display = "flex";
 }
 function close_B() {
     console.log("YEs");

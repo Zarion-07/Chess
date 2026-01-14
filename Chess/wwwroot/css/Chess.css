@@ -115,41 +115,69 @@
     height: 100%;
 }
 
-#victory-B {
+ #victory-B {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    background-color: #141414;
+    border: black 3px solid;
+    border-radius: 8px;
+
+    height: clamp(300px, 40vh, 350px);
+    width: clamp(280px, 90vw, 320px);
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+}
+#victory-W {
     position: fixed;
     display: none;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
     background-color: #141414;
-    border: black 2px solid;
+    border: black 3px solid;
     border-radius: 8px;
-    height: 45vh;
-    width: 25vw;
-    justify-content: center;
-    align-items: center;
+
+    height: clamp(300px, 40vh, 350px);
+    width: clamp(280px, 90vw, 320px);
     top: 30%;
-    left: 37%;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 999;
 }
 
-#victory-B p {
+#victory-W p, #victory-B p {
+    margin: 0;
     text-transform: uppercase;
-    background-color: gray;
     text-align: center;
     font-weight: bold;
     font-size: xx-large;
     color: white;
+    background-color: gray;
+    
 }
 
-.refresh {
+#victory-button {
+    width: 100%;
+    padding: 2vh;
+    display: flex;
+    justify-content: space-between;
+    gap: 1vw;
+}
+
+.refresh{
     border: white 2px;
     background-color: limegreen;
     color: white;
     font-weight: bold;
     border-radius: 1vh;
-    height: 8vh;
-    width: 17vh;
-    margin-left: 1vh;
-    margin-top: 25vh;
-    display: inline-block;
+    width: clamp(120px, 17vw, 120px);
+    height: clamp(44px, 8vh, 64px);
+
 }
 .close {
     border: white 2px;
@@ -157,33 +185,8 @@
     color: white;
     font-weight: bold;
     border-radius: 1vh;
-    height: 8vh;
-    width: 17vh;
-    margin-left: 14vh;
-    margin-top: 27vh;
-    display: inline-block;
-}
-
-#victory-W {
-    position: fixed;
-    display: none;
-    background-color: #141414;
-    border: black 2px solid;
-    border-radius: 8px;
-    height: 45vh;
-    width: 25vw;
-    top: 30%;
-    left: 37%;
-    z-index: 999;
-}
-
-#victory-W p {
-    text-transform: uppercase;
-    text-align: center;
-    font-weight: bold;
-    font-size: xx-large;
-    color: white;
-    background-color: gray;
+    width: clamp(120px, 17vw, 120px);
+    height: clamp(44px, 8vh, 64px);
 }
 
 .overlay {

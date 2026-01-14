@@ -53,18 +53,6 @@ class StockfishBot {
 
 let bot = new StockfishBot();
 
-function changeFolderB() {
-    Player.color = "B";
-    Player.folder = "NewImages"; 
-    console.log(Player);
-}
-
-function changeFolderW() {
-    Player.color = "W";
-    Player.folder = "Images"; 
-    console.log(Player);
-}
-
 function makeBotMove() {
     bot.getBestMove(currentFEN, (move) => {
         console.log('Bot wants to play:', move);

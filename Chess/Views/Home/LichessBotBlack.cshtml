@@ -16,7 +16,7 @@
     <script>
         let Player = {
             color: "B",
-            folder: "NewImages"
+            folder: "Images"
         };
     </script>
 </head>
@@ -56,7 +56,7 @@
                         <td class="square @squareColor clickable-element hover" data-piece="@piece" data-row="@row" data-col="@col" onclick="playBot(this)">
                             @if (!string.IsNullOrEmpty(piece))
                             {
-                                <img src="~/NewImages/@(piece).png" alt="@piece" />
+                                <img src="~/Images/@(piece).png" alt="@piece" />
                             }
                         </td>
                     }
@@ -84,10 +84,10 @@
         <div id="White_Promotion" name="White_Promotion">
             <table>
                 <tr>
-                    <td data-piece="WQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/WQ.png" alt="WQ" /></td>
-                    <td data-piece="WR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/WR.png" alt="WR" /></td>
-                    <td data-piece="WN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/WN.png" alt="WN" /></td>
-                    <td data-piece="WB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/WB.png" alt="WB" /></td>
+                    <td data-piece="WQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WQ.png" alt="WQ" /></td>
+                    <td data-piece="WR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WR.png" alt="WR" /></td>
+                    <td data-piece="WN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WN.png" alt="WN" /></td>
+                    <td data-piece="WB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/WB.png" alt="WB" /></td>
                 </tr>
             </table>
         </div>
@@ -97,10 +97,10 @@
         <div id="Black_Promotion" name="Black_Promotion">
             <table>
                 <tr>
-                    <td data-piece="BQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/BQ.png" alt="BQ" /></td>
-                    <td data-piece="BR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/BR.png" alt="BR" /></td>
-                    <td data-piece="BN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/BN.png" alt="BN" /></td>
-                    <td data-piece="BB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/NewImages/BB.png" alt="BB" /></td>
+                    <td data-piece="BQ" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BQ.png" alt="BQ" /></td>
+                    <td data-piece="BR" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BR.png" alt="BR" /></td>
+                    <td data-piece="BN" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BN.png" alt="BN" /></td>
+                    <td data-piece="BB" class="box" onclick="changeImage(this)"><img id="promotion" src="~/Images/BB.png" alt="BB" /></td>
                 </tr>
             </table>
         </div>
