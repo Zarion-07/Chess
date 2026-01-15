@@ -1,80 +1,88 @@
-/* =========================
-   DARK HOME PAGE THEME
-   ========================= */
 
 body.dark-home {
     margin: 0;
+    padding-top: 0 !important;
     min-height: 100vh;
     background: radial-gradient(circle at top, #1e1e1e, #000);
     color: white;
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Remove Bootstrap container padding on home */
-body.dark-home .container {
-    max-width: 100%;
-    padding: 0;
-}
-
-/* Main home container */
-body.dark-home .home-container {
-    min-height: calc(100vh - 120px); /* header + footer */
+#Home {
+    position: fixed;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
+    align-items: stretch;
+    justify-content: flex-start;
+    background-color: #333333;
+    border: black 3px solid;
+    border-radius: 8px;
+    margin-top: 0;
+    
+    height: clamp(300px, 40vh, 350px);
+    width: clamp(280px, 90vw, 320px);
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
 }
 
-/* Title */
-body.dark-home .home-container h1 {
-    font-size: 3rem;
-    letter-spacing: 4px;
-}
-
-/* Play button box */
-body.dark-home #Bot1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Buttons (shared) */
-body.dark-home .home-container button {
-    height: 70px;
-    width: 220px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-/* Play Bot button */
-body.dark-home #Bot1 button {
-    background-color: limegreen;
-    color: black;
-}
-
-body.dark-home #Bot1 button:hover {
-    transform: scale(1.08);
-    box-shadow: 0 10px 25px rgba(0, 255, 0, 0.4);
-}
-
-/* Choose color panel */
-body.dark-home #ChooseColor {
-    display: none;
-    gap: 20px;
-}
-
-/* Color buttons */
-body.dark-home #ChooseColor button:first-child {
-    background: black;
+#Home p {
     color: white;
+    background-color: #686868;
+    border-radius: 8px 8px 0 0;
+    font-size: xx-large;
+    text-align: center;
+    font-weight: bold;
+    justify-content: center;
+    text-transform: uppercase;
+    height: 7vh;
+    border: #1e1e1e;
 }
 
-body.dark-home #ChooseColor button:last-child {
-    background: white;
-    color: black;
+#Home-button{
+    display: flex;
+    flex-direction: column;   
+    align-items: center;      
+    justify-content: center;
+    gap: 2vh;                 
+    padding-bottom: 2vh;
+    border: #1e1e1e;
+}
+
+#Home-button button{
+    color: white;
+    background-color: limegreen;
+    padding: 2vh 2vw;
+    height: clamp(40px, 7vh, 90px);
+    width: clamp(220px, 60vw, 280px);
+    border-radius: 8px;
+    border-color: #1e1e1e !important; 
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#Home-button button:hover{
+    color: white;
+    background-color: #66bb6a;
+    padding: 2vh 2vw;
+    height: clamp(40px, 7vh, 90px);
+    width: clamp(220px, 60vw, 280px);
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+nav.navbar {
+    z-index: 15;
+}
+
+.home-icon {
+    width: 6vw;          
+    max-width: 60px;    
+    min-width: 32px;   
+    height: auto;  
+    margin: 1vh auto;
+    display: block;
 }

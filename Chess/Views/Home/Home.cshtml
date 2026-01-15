@@ -8,43 +8,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="~/css/Home.css" />
-    <style>
-        button {
-            color: white;
-            background-color: limegreen;
-            height: 200px;
-            width: 300px;
-        }
-    </style>
-
-    
-
+    <link rel="stylesheet" href="~/css/Home.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="home-container">
-        <div id="Bot1">
-            <button type="button" onclick="ChooseColor()">Play Bot</button>
-        </div>
-
-        <div id="ChooseColor">
-            <h2>Choose a color</h2>
+    <div id="Home">
+        <p>OFFCHESS</p>
+        <img src="~/Images/WK.png" alt="WhiteKing" class="home-icon"/>
+        <div id="Home-button">
+            <form asp-controller="Home" asp-action="Index" method="get">
+                <button>Play Offline</button>
+            </form>
             <form asp-controller="Home" asp-action="LichessBot" method="get">
-                <button>White</button>
-            </form>
-            <form asp-controller="Home" asp-action="LichessBotBlack" method="get">
-                <button>Black</button>
+                <button>Play a Bot</button>
             </form>
         </div>
-
     </div>
-
-    @section Scripts {
-    <script>
-        function ChooseColor() {
-            document.getElementById("Bot1").style.display = "none";
-            document.getElementById("ChooseColor").style.display = "flex";
-        }
-    </script>}
 </body>
 </html>

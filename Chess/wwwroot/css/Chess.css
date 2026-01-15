@@ -117,10 +117,10 @@
 
  #victory-B {
     position: fixed;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: stretch;
-    justify-content: space-between;
+    justify-content: flex-start;
     background-color: #141414;
     border: black 3px solid;
     border-radius: 8px;
