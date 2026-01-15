@@ -15,18 +15,12 @@
     <script>
         let Player = {
             color : "W",
-            folder: "Images"
+            folder: "Images",
+            isBot: true
         }
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<nav>
-    
-</nav>
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-</div>
 
 <body>
     <div id="moveInfo">
@@ -65,16 +59,18 @@
         </table>
     </div>
 
-    <div class="container-VB">
-        <div id="victory-B">
-            <p class="victory">BLACK HAS WON</p>
+    <div id="victory-B">
+        <p class="victory">BLACK HAS WON</p>
+        <div id="victory-button">
             <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
             <button class="close" type="submit" onclick="close_B()">Back</button>
         </div>
     </div>
-    <div class="container-VW">
-        <div id="victory-W">
-            <p class="victory">WHITE HAS WON</p>
+
+
+    <div id="victory-W">
+        <p class="victory">WHITE HAS WON</p>
+        <div id="victory-button">
             <button class="refresh" type="submit" onclick="refreshed()">Play Again</button>
             <button class="close" type="submit" onclick="close_W()">Back</button>
         </div>

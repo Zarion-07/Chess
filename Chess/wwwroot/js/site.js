@@ -30,7 +30,6 @@ function play(piece) {
     let moveMade = false;
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
-        console.log(item);
         if (!item.pieceName) return;
         
         if(item.pieceType === "K" && item.color === to_Play) {
@@ -38,7 +37,6 @@ function play(piece) {
             return;
         } else {
             const dict = isPinned(item);
-            console.log(dict);
             if(dict && dict.size == 1) {
                 pinImplementation(dict, item, currentFEN);
                 console.log(dict);
@@ -49,12 +47,11 @@ function play(piece) {
             }
 
             else {
-                console.log(dict);
                 if(CheckCase.testing === true) {
                     moves = pinCheck(piece);
                     console.log(CheckCase.possibleMoves);
                     const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                    console.log(moves);
+                    
                     if(commonElements.length > 0) {
                         item.node.classList.add('highlightPiece');
                         commonElements.forEach(element => {
@@ -84,14 +81,13 @@ function play(piece) {
         const selected = document.querySelector(".highlightPiece");
 
         if(!selected) {
-            console.log(item);
             document.querySelectorAll(".highlighted, .enemy")
                 .forEach(sq => sq.classList.remove("highlighted", "enemy"));
             return;
         }
         
         const compare = new Piece(selected);
-        console.log(item)
+        
         if ((item.pieceName && item.node !== compare.node && item.color === to_Play)) {
             
             document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
@@ -116,9 +112,8 @@ function play(piece) {
                 else {
                     if(CheckCase.testing === true) {
                         moves = pinCheck(piece);
-                        console.log(CheckCase.possibleMoves);
                         const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                        console.log(moves);
+                        
                         if(commonElements.length > 0) {
                             item.node.classList.add('highlightPiece');
                             commonElements.forEach(element => {
@@ -156,10 +151,8 @@ function play(piece) {
             CheckCase.testing = false;
             const destinationSquare = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
             const movedPiece = new Piece(destinationSquare);
-    
-            console.log(movedPiece); 
+     
             inCheck(movedPiece);     
-            console.log(CheckCase);
 
             if (newFEN) {
                 console.log(newFEN)
@@ -173,7 +166,6 @@ function play(piece) {
         const movedPiece = new Piece(destinationSquare);
         const possibleMoves = isCheckmated(movedPiece);
 
-        console.log(possibleMoves);
         if(possibleMoves) CheckCase.checkmated = false;
         else CheckCase.checkmated = true;
     }

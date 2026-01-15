@@ -1,12 +1,15 @@
-﻿
+﻿* {
+    font-family: Arial, Helvetica, sans-serif;
+}
 .chess-container {
     display: flex;
     justify-content: center;
-    margin-top: 2vh;
+    margin-top: 10vh;
 }
 
 #moveInfo {
     margin: 0;
+    margin-top: 5vh;
     display: flex;
     justify-content: center; 
     align-items: center;
@@ -14,13 +17,13 @@
 
 #chessboard {
     border-collapse: collapse;
-    width: 480px;
-    height: 480px;
+    width: clamp(280px, 80vmin, 480px);
+    height: clamp(280px, 80vmin, 480px);
 }
 
     #chessboard .square {
-        width: 60px;
-        height: 60px;
+        width: calc(100% / 8);
+        height: calc(100% / 8);
         text-align: center;
         vertical-align: middle;
     }
@@ -115,19 +118,19 @@
     height: 100%;
 }
 
- #victory-B {
+#victory-B {
     position: fixed;
     display: none;
     flex-direction: column;
     align-items: stretch;
-    justify-content: flex-start;
+    justify-content: space-between;
     background-color: #141414;
-    border: black 3px solid;
+    border: black 2px solid;
     border-radius: 8px;
 
-    height: clamp(300px, 40vh, 350px);
-    width: clamp(280px, 90vw, 320px);
-    top: 30%;
+    height: clamp(100px, 40vh, 350px);
+    width: clamp(80px, 90vw, 320px);
+    top: 25%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
@@ -139,12 +142,12 @@
     align-items: stretch;
     justify-content: space-between;
     background-color: #141414;
-    border: black 3px solid;
+    border: black 2px solid;
     border-radius: 8px;
 
     height: clamp(300px, 40vh, 350px);
     width: clamp(280px, 90vw, 320px);
-    top: 30%;
+    top: 25%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 999;
@@ -152,6 +155,7 @@
 
 #victory-W p, #victory-B p {
     margin: 0;
+    border-radius: 8px 8px 0 0;
     text-transform: uppercase;
     text-align: center;
     font-weight: bold;
@@ -166,7 +170,13 @@
     padding: 2vh;
     display: flex;
     justify-content: space-between;
+    text-transform: uppercase;
+    font-size: medium;
     gap: 1vw;
+}
+
+#victory-button button {
+    text-transform: uppercase;
 }
 
 .refresh{

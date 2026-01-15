@@ -277,7 +277,7 @@ function kingMove(piece) {
                 else if(kingMoves.includes("14") && castling.includes("q")) {
                     node.classList.add('enemy');
                 } else {
-                    node.classList.add('highlighted');
+                    return;
                 }
             }
 
@@ -285,11 +285,12 @@ function kingMove(piece) {
                 if(kingMoves.includes("86") && castling.includes("K")) {
                     node.classList.add('enemy');
                 }
-
+                
                 else if(kingMoves.includes("16") && castling.includes("k")) {
                     node.classList.add('enemy');
-                } else {
-                    node.classList.add('highlighted');
+                }
+                else {
+                    return;
                 }
             }
 

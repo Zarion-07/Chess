@@ -1,6 +1,3 @@
-/* =========================
-   GLOBAL DARK THEME
-   ========================= */
 
 body {
     margin: 0;
@@ -10,7 +7,6 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Remove Bootstrap white container background */
 .container {
     max-width: 100%;
 }
@@ -34,10 +30,6 @@ body {
     background-color: #0f0f0f;
     color: #aaa;
 }
-
-/* =========================
-   HOME PAGE STYLES
-   ========================= */
 
 .home-container {
     min-height: calc(100vh - 120px);
@@ -64,31 +56,4 @@ body {
     border: none;
     cursor: pointer;
     transition: all 0.25s ease;
-}
-
-/* Play Bot button */
-#Bot1 button {
-    background-color: limegreen;
-    color: black;
-}
-
-#Bot1 button:hover {
-    transform: scale(1.08);
-    box-shadow: 0 10px 25px rgba(0, 255, 0, 0.4);
-}
-
-/* Choose color panel */
-#ChooseColor {
-    display: none;
-    gap: 20px;
-}
-
-#ChooseColor button:first-child {
-    background: black;
-    color: white;
-}
-
-#ChooseColor button:last-child {
-    background: white;
-    color: black;
 }
