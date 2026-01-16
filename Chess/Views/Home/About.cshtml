@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "About";
+}
+<style>
+    * {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: large;
+        color: azure;
+    }
+    
+    #About {
+        width: 90%;
+        max-width: 900px;   
+        min-width: 280px;   
+        margin: 2rem auto;
+    }
+
+    a {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+</style>
+
+<div id="About">
+    <h1>About</h1>
+    <br />
+    <p>OffChess is meant to provide an offline chess playing experience.</p>
+    <p>The platform doesn't require any authentication or login.</p>
+
+    <article>
+        <ul>
+            <li>This website is made using javascript, bootstrap, css and .NET 9.</li>
+            <li>The bot in the game is Stockfish.</li>
+            <a href="https://cdnjs.com/libraries/stockfish.js/10.0.2" target="_blank">https://cdnjs.com/libraries/stockfish.js/10.0.2</a>
+        </ul>
+    </article>
+</div>
