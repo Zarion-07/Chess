@@ -177,3 +177,40 @@ function close_W() {
 function refreshed() {
     window.location.reload(true);
 }
+
+let pgn = [];
+let count = 0;
+
+function createPGN(target) {
+    if(target.color === "W") {
+        pgn.push(`${count + 1}.`);
+    } 
+
+    let move = [];
+    let column = target.col + parseInt('`'.charCodeAt(0));
+
+    let array = check(target);
+    if(array.at(-1) === 1) {
+        move.push("+");
+    }
+
+    if(target.node.classList.contains('enemy') && !(move.contains("+"))) {
+        move.push("x");
+    }
+
+    if(target.pieceName === "P") {
+        move.push(column);
+        move.push(target.row);
+    } else {
+        move.push(target.pieceName);
+        move.push(column);
+        move.push(target.row);
+    }
+
+    if(target.node.classList.contains('special')) {
+        move = [];
+        move.push("O-O");
+    }
+    pgn.push(move.join());
+    pgn.push(' ');
+}

@@ -4,7 +4,7 @@ function Move(square, currentFEN) {
     let special = 0;
     let castleFEN;
 
-    document.querySelectorAll(".highlighted, .enemy").forEach(sq => {
+    document.querySelectorAll(".highlighted, .enemy, .special").forEach(sq => {
         if (
             square.row === parseInt(sq.getAttribute("data-row")) &&
             square.col === parseInt(sq.getAttribute("data-col"))
@@ -16,7 +16,7 @@ function Move(square, currentFEN) {
     if (avail) {
         const shooter = document.querySelector(".highlightPiece");
         var origin = new Piece(shooter);
-
+        
         shooter.setAttribute("data-piece", "");
         shooter.innerHTML = "";
 
@@ -63,8 +63,8 @@ function Move(square, currentFEN) {
         if (origin.pieceName === "WK" && (castling[0] === "K" || castling[1] === "Q")) {
             castling.splice(0, 1, "-");
             castling.splice(1, 1, "-");
-            const Qnode = document.querySelector(`.enemy[data-row="8"][data-col="3"]`);
-            const Knode = document.querySelector(`.enemy[data-row="8"][data-col="7"]`);
+            const Qnode = document.querySelector(`.special[data-row="8"][data-col="3"]`);
+            const Knode = document.querySelector(`.special[data-row="8"][data-col="7"]`);
 
             if (Qnode && square.col === 3) {
                 
@@ -117,8 +117,8 @@ function Move(square, currentFEN) {
         else if (origin.pieceName === "BK" && (castling[2] === "k" || castling[3] === "q")) {
             castling.splice(2, 1, "-");
             castling.splice(3, 1, "-");
-            const Knode = document.querySelector(`.enemy[data-row="1"][data-col="7"]`);
-            const Qnode = document.querySelector(`.enemy[data-row="1"][data-col="3"]`);
+            const Knode = document.querySelector(`.special[data-row="1"][data-col="7"]`);
+            const Qnode = document.querySelector(`.special[data-row="1"][data-col="3"]`);
             if (Qnode && square.col === 3) {
                 
                 const currentRook = document.querySelector(`[data-row="1"][data-col="1"]`);
@@ -168,8 +168,10 @@ function Move(square, currentFEN) {
         square.node.innerHTML = `<img src="/${Player.folder}/${origin.pieceName}.png" alt="${origin.pieceName}" />`;
         square.node.setAttribute("data-piece", origin.pieceName);
 
-        document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
-            .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy"));
+        /* createPGN(square, origin); */
+
+        document.querySelectorAll(".highlighted, .highlightPiece, .enemy, .special")
+            .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy", "special"));
 
         if (special === 0) {
             let newFEN = ManipulateFen(origin, square, currentFEN);
@@ -183,6 +185,6 @@ function Move(square, currentFEN) {
     }
 
     
-    document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
-        .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy"));
+    document.querySelectorAll(".highlighted, .highlightPiece, .enemy, .special")
+        .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy", "special"));
 }

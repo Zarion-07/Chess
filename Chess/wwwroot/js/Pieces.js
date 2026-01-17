@@ -111,7 +111,6 @@ function Pieces(item, currentFEN) {
                 let file = data[0];
                 file = file.charCodeAt(0) - '`'.charCodeAt(0);
                 let enPassantCol = parseInt(file) ;
-                console.log(enPassantCol);
                 if (data != "-" && (Math.abs(enPassantCol - item.col) === 1) && item.row === 5) {
 
                     let enPassantSq = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${enPassantCol}"]`);

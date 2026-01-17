@@ -271,11 +271,11 @@ function kingMove(piece) {
 
             else if (element === "83" || element === "13"){
                 if(kingMoves.includes("84") && castling.includes("Q")) {
-                    node.classList.add('enemy');
+                    node.classList.add('special');
                 }
 
                 else if(kingMoves.includes("14") && castling.includes("q")) {
-                    node.classList.add('enemy');
+                    node.classList.add('special');
                 } else {
                     return;
                 }
@@ -283,11 +283,11 @@ function kingMove(piece) {
 
             else if (element === "87" || element === "17"){
                 if(kingMoves.includes("86") && castling.includes("K")) {
-                    node.classList.add('enemy');
+                    node.classList.add('special');
                 }
                 
                 else if(kingMoves.includes("16") && castling.includes("k")) {
-                    node.classList.add('enemy');
+                    node.classList.add('special');
                 }
                 else {
                     return;

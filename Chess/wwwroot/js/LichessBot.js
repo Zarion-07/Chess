@@ -52,14 +52,13 @@ class StockfishBot {
 }
 
 let bot = new StockfishBot();
-
+setTimeout(() => {}, 100);
 function makeBotMove() {
     bot.getBestMove(currentFEN, (move) => {
         console.log('Bot wants to play:', move);
         
-        // Parse the move (e.g., "e2e4")
-        const fromCol = move[0].charCodeAt(0) - 96; // a=1, b=2, etc.
-        const fromRow = 9 - parseInt(move[1]); // Convert to your board's row system
+        const fromCol = move[0].charCodeAt(0) - 96;
+        const fromRow = 9 - parseInt(move[1]); 
         const toCol = move[2].charCodeAt(0) - 96;
         const toRow = 9 - parseInt(move[3]);
         
