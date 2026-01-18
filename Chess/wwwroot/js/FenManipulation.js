@@ -75,8 +75,6 @@
     // Replace the old board part in the FEN string
     parts[0] = newBoard;
     const newFEN = parts.join(" "); // Reconstruct the full FEN string
-
-    console.log(newFEN);
     return newFEN;
 }
 
@@ -213,7 +211,6 @@ function changeImage(node) {
     }
 
     const square = document.querySelector(`.square[data-row="${r}"][data-col="${j}"]`);
-    console.log(square);
     square.innerHTML = `<img src="/${Player.folder}/${piece}.png" alt="${piece}" />`;
     square.dataset.piece = `${piece}`;
     parts[0] = board.join("/");
@@ -287,7 +284,6 @@ function castlingFEN(origin, rook, currentFEN) {
         
         parts[0] = newBoard;
         currentFEN = parts.join(" ");
-        console.log(currentFEN)
         return currentFEN;
     }
     else if (origin.color === "B" && rook.col === 4) {

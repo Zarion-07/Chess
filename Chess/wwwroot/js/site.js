@@ -39,7 +39,6 @@ function play(piece) {
             const dict = isPinned(item);
             if(dict && dict.size == 1) {
                 pinImplementation(dict, item, currentFEN);
-                console.log(dict);
             } 
             
             else if(dict && dict.size >= 2) {
@@ -49,7 +48,6 @@ function play(piece) {
             else {
                 if(CheckCase.testing === true) {
                     moves = pinCheck(piece);
-                    console.log(CheckCase.possibleMoves);
                     const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
                     
                     if(commonElements.length > 0) {
@@ -57,7 +55,6 @@ function play(piece) {
                         commonElements.forEach(element => {
                             const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                             const data = node.getAttribute("data-piece");
-                            console.log(element);
                             if(data[0] === item.oppColor) {
                                 node.classList.add('enemy');
                                 CheckCase.checked = false;
@@ -119,7 +116,6 @@ function play(piece) {
                             commonElements.forEach(element => {
                                 const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                                 const data = node.getAttribute("data-piece");
-                                console.log(element);
                                 if(data[0] === item.oppColor) {
                                     node.classList.add('enemy');
                                     CheckCase.checked = false;
@@ -155,7 +151,6 @@ function play(piece) {
             inCheck(movedPiece);     
 
             if (newFEN) {
-                console.log(newFEN)
                 currentFEN = newFEN;
             }
         }

@@ -6,12 +6,9 @@ class StockfishBot {
 
         this.engine.onmessage = (event) => {
             const line = event.data;
-            console.log('Stockfish:', line);
 
-            // Engine finished initializing
             if (line === 'readyok') {
                 this.engineReady = true;
-                console.log('Stockfish READY');
             }
 
             // Best move output
@@ -55,7 +52,6 @@ let bot = new StockfishBot();
 setTimeout(() => {}, 100);
 function makeBotMove() {
     bot.getBestMove(currentFEN, (move) => {
-        console.log('Bot wants to play:', move);
         
         const fromCol = move[0].charCodeAt(0) - 96;
         const fromRow = 9 - parseInt(move[1]); 
@@ -99,7 +95,6 @@ function playBot(piece) {
     let moveMade = false;
 
     if (highlighted.length === 0 && (item.color === to_Play)) {
-        console.log(item);
         if (!item.pieceName) return;
         
         if(item.pieceType === "K" && item.color === to_Play) {
@@ -107,10 +102,8 @@ function playBot(piece) {
             return;
         } else {
             const dict = isPinned(item);
-            console.log(dict);
             if(dict && dict.size == 1) {
                 pinImplementation(dict, item, currentFEN);
-                console.log(dict);
             } 
             
             else if(dict && dict.size >= 2) {
@@ -118,18 +111,16 @@ function playBot(piece) {
             }
 
             else {
-                console.log(dict);
                 if(CheckCase.testing === true) {
                     moves = pinCheck(piece);
-                    console.log(CheckCase.possibleMoves);
                     const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                    console.log(moves);
+
                     if(commonElements.length > 0) {
                         item.node.classList.add('highlightPiece');
                         commonElements.forEach(element => {
                             const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                             const data = node.getAttribute("data-piece");
-                            console.log(element);
+                            
                             if(data[0] === item.oppColor) {
                                 node.classList.add('enemy');
                                 CheckCase.checked = false;
@@ -153,14 +144,13 @@ function playBot(piece) {
         const selected = document.querySelector(".highlightPiece");
 
         if(!selected) {
-            console.log(item);
             document.querySelectorAll(".highlighted, .enemy")
                 .forEach(sq => sq.classList.remove("highlighted", "enemy"));
             return;
         }
         
         const compare = new Piece(selected);
-        console.log(item)
+        
         if ((item.pieceName && item.node !== compare.node && item.color === to_Play)) {
             
             document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
@@ -185,15 +175,15 @@ function playBot(piece) {
                 else {
                     if(CheckCase.testing === true) {
                         moves = pinCheck(piece);
-                        console.log(CheckCase.possibleMoves);
+                        
                         const commonElements = moves.filter(value => CheckCase.possibleMoves.includes(value));
-                        console.log(moves);
+                        
                         if(commonElements.length > 0) {
                             item.node.classList.add('highlightPiece');
                             commonElements.forEach(element => {
                                 const node = document.querySelector(`.square[data-row="${element[0]}"][data-col="${element[1]}"]`);
                                 const data = node.getAttribute("data-piece");
-                                console.log(element);
+                                
                                 if(data[0] === item.oppColor) {
                                     node.classList.add('enemy');
                                     CheckCase.checked = false;
@@ -219,7 +209,6 @@ function playBot(piece) {
             return;
         }
         
-        // THIS IS THE ACTUAL MOVE EXECUTION BLOCK (was missing!)
         else {
             const newFEN = Move(item, currentFEN);
             moveMade = true;
@@ -236,16 +225,13 @@ function playBot(piece) {
             );
             const movedPiece = new Piece(destinationSquare);
 
-            console.log(movedPiece);
             inCheck(movedPiece);
-            console.log(CheckCase);
             
             if (newFEN) {
                 currentFEN = newFEN;
                 // Check for checkmate after move
                 if(CheckCase.checked === true) {
                     const possibleMoves = isCheckmated(movedPiece);
-                    console.log(possibleMoves);
                     if(possibleMoves) CheckCase.checkmated = false;
                     else CheckCase.checkmated = true;
                 }

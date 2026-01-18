@@ -4,11 +4,7 @@ function Pieces(item, currentFEN) {
     document.querySelectorAll(".highlighted, .highlightPiece, .enemy")
         .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy"));
     
-    const piece = document.querySelector(`.square[data-row="${item.row}"][data-col="${item.col}"]`);
-    console.log(currentFEN);
     item.node.classList.add('highlightPiece');
-
-    const opp_Color = (item.color === "W") ? "B" : "W";
 
     switch (item.pieceName) {
 
@@ -56,13 +52,9 @@ function Pieces(item, currentFEN) {
                 let enPassantCol = parseInt(file);
                 
                 if (data != "-" && (Math.abs(enPassantCol - item.col) === 1) && item.row === 4) {
-
-
-                    console.log(enPassantCol);
-
                     let enPassantSq = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${enPassantCol}"]`);
                     const pieceAtSquare3 = enPassantSq.getAttribute("data-piece");
-                    console.log(pieceAtSquare3);
+               
                     if (!pieceAtSquare3) {
                         enPassantSq.classList.add('enemy');
                     }
@@ -115,7 +107,7 @@ function Pieces(item, currentFEN) {
 
                     let enPassantSq = document.querySelector(`.square[data-row="${item.row + 1}"][data-col="${enPassantCol}"]`);
                     const pieceAtSquare3 = enPassantSq.getAttribute("data-piece");
-                    console.log(pieceAtSquare3);
+              
                     if (!pieceAtSquare3) {
                         enPassantSq.classList.add('enemy');
                     }
@@ -142,7 +134,6 @@ function Pieces(item, currentFEN) {
                     if (!targetNode) break;
                 
                     const pieceAtSquare = targetNode.getAttribute("data-piece");
-                    console.log(pieceAtSquare);
                     if (!pieceAtSquare) {
                         targetNode.classList.add('highlighted');
                         dist++;
@@ -262,7 +253,7 @@ function Pieces(item, currentFEN) {
 
                     target_row = item.row + rowDir*dist;
                     target_col = item.col + colDir*dist;
-                    console.log(target_row);
+                  
                     if (target_row < 1 || target_row > 8 || target_col < 1 || target_col > 8) break;
 
                     const targetNode = document.querySelector(`.square[data-row="${target_row}"][data-col="${target_col}"]`);

@@ -1,5 +1,4 @@
 function Move(square, currentFEN) {
-    console.log(Player);
     let avail = false;
     let special = 0;
     let castleFEN;
@@ -16,7 +15,6 @@ function Move(square, currentFEN) {
     if (avail) {
         const shooter = document.querySelector(".highlightPiece");
         var origin = new Piece(shooter);
-        
         shooter.setAttribute("data-piece", "");
         shooter.innerHTML = "";
 
@@ -78,7 +76,6 @@ function Move(square, currentFEN) {
 
                 var Rook = new Piece(newRook);
                 castleFEN = castlingFEN(origin, Rook, currentFEN);
-                console.log(castleFEN);
                 const castlePart = castleFEN.split(" ");
                 castling.splice(0, 1, "-");
                 castling.splice(1, 1, "-");
@@ -157,7 +154,6 @@ function Move(square, currentFEN) {
                 castling.splice(3, 1, "-");
                 castlePart[2] = castling.join("");
                 parts = castlePart;
-                console.log(currentFEN)
                 special = 1;
             }
             parts[1] = "w";
@@ -167,8 +163,6 @@ function Move(square, currentFEN) {
 
         square.node.innerHTML = `<img src="/${Player.folder}/${origin.pieceName}.png" alt="${origin.pieceName}" />`;
         square.node.setAttribute("data-piece", origin.pieceName);
-
-        /* createPGN(square, origin); */
 
         document.querySelectorAll(".highlighted, .highlightPiece, .enemy, .special")
             .forEach(sq => sq.classList.remove("highlighted", "highlightPiece", "enemy", "special"));

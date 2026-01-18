@@ -2,7 +2,7 @@ function isCheckmated(item) {
     const enemyKing = new Piece(document.querySelector(`.square[data-piece="${item.oppColor}K"]`));
     const kingMoves = kingMoveCheck(enemyKing);
     CheckCase.kingMoves = [];
-    console.log(kingMoves)
+    
     if(kingMoves.length > 0) {
         CheckCase.kingMoves.push(...kingMoves);
     }
@@ -13,9 +13,7 @@ function isCheckmated(item) {
         let move = possibleMove(piece);
         
         if(move.at(-1) === "1") {
-            console.log(move);
             move.splice(-1,1);
-            console.log(move);
             checks.push(move);
             CheckCase.node.push(piece);
         }
@@ -24,7 +22,6 @@ function isCheckmated(item) {
     if(checks.length === 1) {
         CheckCase.possibleMoves = [];
         checkmate(item);
-        console.log(checks[0])
         CheckCase.possibleMoves.push(...checks[0]);
         const statusCheck = checkmate(item);
         if(statusCheck && CheckCase.kingMoves.length === 0) {
@@ -36,14 +33,10 @@ function isCheckmated(item) {
                 return null;
             }
         }
-        console.log(CheckCase.possibleMoves)
         return CheckCase.possibleMoves;
     }
-    console.log(CheckCase.kingMoves)
-    console.log(checks)
+    
     if (checks.length > 1 && CheckCase.kingMoves.length === 0) {
-        console.log(CheckCase.kingMoves.length === 0)
-        console.log(checks.length > 1)
         if(item.color === "W") {
             victoryWhite();
             return null;
@@ -64,12 +57,10 @@ function checkmate(item) {
         const name = new Piece(piece);
         move = pinCheck(piece);
         if(move.some(element => CheckCase.possibleMoves.includes(element)) && name.pieceType !== "K") {
-            console.log(move, piece);
             islost = false;
             break;
         }
     }
-    console.log(islost);
     return islost;
 }
 
@@ -111,7 +102,7 @@ function pinImplementation(dict, item, currentFEN) {
 
                     let enPassantSq = document.querySelector(`.square[data-row="${item.row - 1}"][data-col="${enPassantCol}"]`);
                     const pieceAtSquare3 = enPassantSq.getAttribute("data-piece");
-                    console.log("W");
+                    
                     if (!pieceAtSquare3 && enPassantCol == move[1] && item.row == 4) {
                         targetNode.classList.add('enemy');
                         return;
@@ -132,7 +123,6 @@ function pinImplementation(dict, item, currentFEN) {
                 if(dataPiece && dataPiece[0] === item.oppColor) {
                     targetNode.classList.add('enemy');
                 } else {
-                    console.log("a");
                     targetNode.classList.add('highlighted');
                 }
             }
@@ -147,7 +137,6 @@ function inCheck(item) {
         item = check(move);
         
         if (item.at(-1) == 1) {
-            console.log(item, move)
             CheckCase.checked = true;
             CheckCase.testing = true;
             break;
@@ -181,36 +170,50 @@ function refreshed() {
 let pgn = [];
 let count = 0;
 
-function createPGN(target) {
+function createPGN(oldTarget, origin) {
+    const target = new Piece(oldTarget.node);
+    console.log(target);
     if(target.color === "W") {
         pgn.push(`${count + 1}.`);
+        count++;
     } 
 
     let move = [];
-    let column = target.col + parseInt('`'.charCodeAt(0));
+    let column = String.fromCharCode('a'.charCodeAt(0) + target.col - 1);
 
-    let array = check(target);
+    if(target.node.classList.contains('enemy')) {
+        if(target.pieceType === "P") {
+            let oldcol = String.fromCharCode('a'.charCodeAt(0) + origin.col - 1);
+            move.push(oldcol);
+        } else {
+            move.push(target.pieceType);
+        }
+        move.push("x");
+    }
+    
+    if(target.pieceType === "P") {
+        move.push(column);
+        move.push(target.row);
+    } else {
+        if(!(target.node.classList.contains('enemy'))) move.push(target.pieceType);
+
+        move.push(column);
+        move.push(target.row);
+    }
+
+    let array = check(target.node);
     if(array.at(-1) === 1) {
         move.push("+");
     }
 
-    if(target.node.classList.contains('enemy') && !(move.contains("+"))) {
-        move.push("x");
-    }
-
-    if(target.pieceName === "P") {
-        move.push(column);
-        move.push(target.row);
-    } else {
-        move.push(target.pieceName);
-        move.push(column);
-        move.push(target.row);
-    }
-
-    if(target.node.classList.contains('special')) {
+    if(target.node.classList.contains('special') && target.col == 7) {
         move = [];
         move.push("O-O");
+    } else if(target.node.classList.contains('special') && target.col == 3) {
+        move = [];
+        move.push("O-O-O");
     }
-    pgn.push(move.join());
-    pgn.push(' ');
+    pgn.push(move.join(""));
+    pgn.push(" ");
+    console.log(pgn.join(""), pgn);
 }
